@@ -19,6 +19,8 @@ from datetime import datetime as dt
 from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter
+from bokeh.models.widgets import TextInput
+from bokeh.layouts import column
 
 # configure the serial connections (the parameters differs on the device you are connecting to)
 ser = serial.Serial(
@@ -91,6 +93,8 @@ def update():
     if pressure[0] == '0':
         pressure = float(pressure[3:-1])
         
+        prep_pressure.value = str(pressure)
+        
         ts = dt.now()
         ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
         source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[pressure]),rollover=rollover_interval)
@@ -107,10 +111,12 @@ def update():
 
     
 
+prep_pressure = TextInput(title="prep pressure:", value=" ")
+
+layout = column(p,prep_pressure)
 
 
-
-curdoc().add_root(p)
+curdoc().add_root(layout)
 curdoc().title = "Logging VACOM pressure"
 curdoc().add_periodic_callback(update, update_interval)
     
