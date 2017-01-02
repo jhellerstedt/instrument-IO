@@ -23,6 +23,11 @@ from bokeh.models import ColumnDataSource, DatetimeTickFormatter
 from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row
 
+
+
+###set to 'True' to use unix 'tail' instead of chugging through whole pressure_logging.txt file
+using_unix = False
+
 #configure the serial connections (the parameters differs on the device you are connecting to)
 ser = serial.Serial(
     port='COM4',
@@ -79,15 +84,30 @@ r = p.line(x='x', y='y', source=source)
 
 #### populate plot with old data if possible:
 
+if using_unix == True:
+    
+    old_data = os.popen('tail -n 10 pressure_log.txt').read()
+    while len(old_data) > 2:
+        temp, old_data = str.split(old_data, '\n', 1)
+        ts, pressure = str.split(temp, '\t', 1)
+        ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
+        pressure = float(pressure)    
+        source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[pressure]),rollover=rollover_interval)
+else:
+    try:
+        f = open("pressure_log.txt")
+        for line in iter(f):
+    #    temp, old_data = str.split(old_data, '\n', 1)
+            ts, pressure = str.split(line, '\t', 1)
+            ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
+            pressure = float(pressure)
+            source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[pressure]),rollover=rollover_interval)
+        f.close()
+    except FileNotFoundError:
+        pass
 
-old_data = os.popen('tail -n 10 pressure_log.txt').read()
-while len(old_data) > 2:
-    temp, old_data = str.split(old_data, '\n', 1)
-    ts, pressure = str.split(temp, '\t', 1)
-    ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
-    pressure = float(pressure)
-    source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[pressure]),rollover=rollover_interval)
-
+    
+    
 global t0, first_run
 t0 = time.time()
 first_run = True
