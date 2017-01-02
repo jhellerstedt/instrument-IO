@@ -21,7 +21,7 @@ from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter
 from bokeh.models.widgets import TextInput
-from bokeh.layouts import column
+from bokeh.layouts import column, row
 
 #configure the serial connections (the parameters differs on the device you are connecting to)
 ser = serial.Serial(
@@ -126,7 +126,7 @@ def update():
 
 prep_pressure = TextInput(title="prep pressure:", value=" ")
 
-layout = column(p,prep_pressure)
+layout = row(p,prep_pressure)
 
 
 curdoc().add_root(layout)
