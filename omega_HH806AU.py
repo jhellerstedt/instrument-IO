@@ -41,6 +41,8 @@ import serial
 import time
 import binascii
 
+# serial_address = '/dev/cu.usbserial-AL00R9JJ'
+
         
 def hex2temp(h, sign):
     if h == '':
@@ -55,9 +57,9 @@ def hex2temp(h, sign):
         else:
             return t
 
-def HH806AUtemperature():
+def HH806AUtemperature(serial_address):
     try:
-        ser = serial.Serial('/dev/cu.usbserial-AL00R9JJ', baudrate=19200, bytesize=8, parity='E', stopbits=1, timeout=1)	
+        ser = serial.Serial(serial_address, baudrate=19200, bytesize=8, parity='E', stopbits=1, timeout=1)	
         
         command = "#0A0000NA2\r\n"
         # command = b"#001N\r\n"
