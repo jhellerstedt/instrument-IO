@@ -30,7 +30,8 @@ using_unix = False
 
 #configure the serial connections (the parameters differs on the device you are connecting to)
 ser = serial.Serial(
-    port='COM4',
+    # port='COM4',
+    port='/dev/cu.usbserial',
     baudrate=19200,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
