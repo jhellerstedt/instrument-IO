@@ -75,7 +75,7 @@ def HH806AUtemperature(serial_address):
         ser.write(command)
         # r = ser.read(14)
         r = ser.readline()
-        print(r)
+        # print(r)
         # print(binascii.hexlify(r[4:7]))
         # print(r[10:12])
         ser.close()
