@@ -52,18 +52,22 @@ p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime") # , lod_facto
 p.y_range.range_padding=0
 
 p.xaxis.axis_label = "time"
-p.xaxis.formatter=DatetimeTickFormatter(formats=dict(
-     microseconds=["%k %M %S"],
-     milliseconds=["%k %M %S"],
-     seconds=["%k %M %S"],
-     minsec=["%k %M %S"],
-     minutes=["%k %M %S"],                                        
-     hourmin=["%k %M"],
-     hours=["%k %M"],
-     days=["%d %k %M"],
-     months=["%d %k %M"],
-     years=["%Y %d %k %M"]          
-    ))
+p.xaxis.formatter=DatetimeTickFormatter()
+
+##removed the following from DatetimeTickFormatter because of bokeh 0.12.4 update
+# formats=dict(
+#      microseconds=["%k %M %S"],
+#      milliseconds=["%k %M %S"],
+#      seconds=["%k %M %S"],
+#      minsec=["%k %M %S"],
+#      minutes=["%k %M %S"],
+#      hourmin=["%k %M"],
+#      hours=["%k %M"],
+#      days=["%d %k %M"],
+#      months=["%d %k %M"],
+#      years=["%Y %d %k %M"]
+#     )
+
 
 p.yaxis.axis_label = "pressure (mbar)"
 
