@@ -19,10 +19,10 @@ this can only be called every 2 SECONDS or the gauge serial communication pukes
 import serial
 import time
 
+global ser
 
-def VACOMpressure(serial_address):
-    pressure = '10'
-    
+def VACOM_open_serial(serial_address):
+    global ser
     try:
         ser = serial.Serial(
             port=serial_address,
@@ -31,11 +31,28 @@ def VACOMpressure(serial_address):
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS
         )
+    except serial.SerialException as e:
+        print(e)
+        return
+    return
     
+def VACOM_close_serial(serial_address):
+    global ser
+    try:
+        ser.close()
+    except serial.SerialException as e:
+        print(e)
+        return
+    return
+
+
+def VACOM_read_pressure():
+    pressure = '10'
+    
+    try:   
         read_command = "RPV1,\r,OK" ## for VACOM MVC-3
         read_command = bytes(read_command, 'utf-8')
-    
-        
+           
         tries = 0
     
         while pressure[0] != '0' or tries>10:
@@ -43,12 +60,10 @@ def VACOMpressure(serial_address):
             time.sleep(.3)
             pressure = ''
             while ser.inWaiting() > 0:
-                pressure += ser.read(1).decode('utf-8')
-        
+                pressure += ser.read(1).decode('utf-8')       
             tries = tries + 1
             time.sleep(.2)
         
-        ser.close()
     except serial.SerialException as e:
         print(e)
         return 0.

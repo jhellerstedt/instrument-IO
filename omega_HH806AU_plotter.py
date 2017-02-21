@@ -27,13 +27,16 @@ from bokeh.layouts import column, row
 ### set serial address
 serial_address = '/dev/cu.usbserial-AL00R9JJ'
 
+##open the connection
+omega.HH806AU_open_connection(serial_address)
+
 
 ## set the log filename as a string
 log_filename = "example.txt"
 
 
 ### if the update_interval callback is 2000 ms or less, too fast for reading the pressure gauge
-update_interval = 500 ## ms
+update_interval = 700 ## ms
 total_axis_hours = 24 ## total hours to keep in bokeh plot
 log_interval = 30 ## minutes interval to write data points to log file
 
@@ -72,7 +75,7 @@ r2 = p.line(x='x', y='y', source=source2, legend="T2 temp", color="blue")
 try:
     f = open(log_filename)
     for line in iter(f):
-        ts, t1, t2 = str.split(line, '\t', 1)
+        ts, t1, t2 = str.split(line, '\t', 2)
         ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
         t1 = float(t1)
         t2 = float(t2)
@@ -94,8 +97,7 @@ def update():
     
     
     ### replace with the function call to read the instrument you want
-    read_value = 1
-    temp1, temp2 = omega.HH806AUtemperature(serial_address)
+    temp1, temp2 = omega.HH806AU_read_temp()
         
     instrument_display1.value = str(temp1)
     instrument_display2.value = str(temp2)

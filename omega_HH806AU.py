@@ -43,6 +43,25 @@ import binascii
 
 # serial_address = '/dev/cu.usbserial-AL00R9JJ'
 
+
+global ser
+
+def HH806AU_open_connection(serial_address):
+    global ser
+    try:
+        ser = serial.Serial(serial_address, baudrate=19200, bytesize=8, parity='E', stopbits=1, timeout=1)
+    except serial.SerialException as e:
+        return e
+    return
+    
+def HH806AU_close_connection():
+    global ser
+    try:
+        ser.close()
+    except:
+        pass
+    return
+
         
 def hex2temp(h, sign):
     if h == '':
@@ -57,28 +76,22 @@ def hex2temp(h, sign):
         else:
             return t
 
-def HH806AUtemperature(serial_address):
+def HH806AU_read_temp():
+    global ser
     try:
-        ser = serial.Serial(serial_address, baudrate=19200, bytesize=8, parity='E', stopbits=1, timeout=1)	
-        
         ###read command structure: # LL ID CH N checksum 0D0A
         ### LL = command length code (# + LL + ID + CH + N + check sum)byte
         ### ID = identification code, e.g. 00
         ### CH = channel identification, e.g. 00
         ### N = data access code, e.g., N
         ### check sum = hex of np.mod(sum(b"# LL ID CH N"), 256)
-         
         
         command = b"#0A0000NA2\r\n"
-        # command = bytes(command, "utf-8")
         
         ser.write(command)
-        # r = ser.read(14)
-        r = ser.readline()
-        # print(r)
-        # print(binascii.hexlify(r[4:7]))
-        # print(r[10:12])
-        ser.close()
+        # r = ser.read(13) ## this is fastest; longest time step
+        r = ser.readline() ## use to read all information from omega
+
     except serial.SerialException as e:
         print(e)
         return 0,0
@@ -87,5 +100,5 @@ def HH806AUtemperature(serial_address):
         t2 = hex2temp(binascii.hexlify(r[10:12]), binascii.hexlify(r[9:10]))
     except:
         return 0,0
-
+    
     return t1, t2
