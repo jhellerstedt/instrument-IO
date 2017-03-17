@@ -19,8 +19,10 @@ import omega_HH806AU as omega
 from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter
-from bokeh.models.widgets import TextInput
+from bokeh.models.widgets import TextInput, Button
 from bokeh.layouts import column, row
+
+from tornado import gen
 
 
 
@@ -28,7 +30,7 @@ from bokeh.layouts import column, row
 serial_address = '/dev/cu.usbserial-AL00R9JJ'
 
 ##open the connection
-omega.HH806AU_open_connection(serial_address)
+# omega.HH806AU_open_connection(serial_address)
 
 
 ## set the log filename as a string
@@ -46,8 +48,6 @@ total_axis_hours = np.multiply(total_axis_hours,3.6e6)
 
 global rollover_interval
 rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
-
-
 
 
 source1 = ColumnDataSource(data=dict(x=[], y=[]))
@@ -91,10 +91,18 @@ global t0, first_run
 t0 = time.time()
 first_run = True
 
+global temp1_old, temp2_old
+temp1_old, temp2_old = omega.HH806AU_read_temp()
 
+
+global timer_zero
+timer_zero = time.time()
+
+@gen.coroutine
 def update():
-    global t0, rollover_interval, first_run, log_interval
+    global t0, rollover_interval, first_run, log_interval, temp1_old, temp2_old, timer_zero
     
+    # time.sleep(update_interval*1e-3)
     
     ### replace with the function call to read the instrument you want
     temp1, temp2 = omega.HH806AU_read_temp()
@@ -103,12 +111,18 @@ def update():
     instrument_display2.value = str(temp2)
         
     ts = dt.now()
-    ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
-    source1.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp1]),rollover=rollover_interval)
-    source2.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp2]),rollover=rollover_interval)
     
+    ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
+    if np.abs(temp1 - temp1_old) < 50:
+        source1.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp1]),rollover=rollover_interval)
+        temp1_old = temp1
+    if np.abs(temp2 - temp2_old) < 50:
+        source2.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp2]),rollover=rollover_interval)
+        temp2_old = temp2    
   
     t1 = time.time()
+    timer_display.value = "{:.2}".format((t1-timer_zero)/60)
+    
     if t1 - t0 > log_interval or first_run == True:  ## take a log point every thirty minutes    
         first_run = False
         ts = str(ts)
@@ -117,18 +131,31 @@ def update():
         log.write(ts + "\t" + str(temp1) + "\t" + str(temp2) + "\n")
         log.close()
         t0 = t1
+        
 
-    
+
+   
 
 instrument_display1 = TextInput(title="T1", value=" ")
 instrument_display2 = TextInput(title="T2", value=" ")
 
-data_values = column(instrument_display1, instrument_display2)
+timer_display = TextInput(title="decimal minutes", value=" ")
+reset_button = Button(label="reset", button_type="default")
+
+@gen.coroutine
+def reset_timer():
+    global timer_zero
+    timer_zero = time.time()
+    
+reset_button.on_click(reset_timer)
+
+
+data_values = column(instrument_display1, instrument_display2, timer_display, reset_button)
 
 layout = row(p,data_values)
 
 
 curdoc().add_root(layout)
-curdoc().title = "generic real-time plotter with logging"
+curdoc().title = "omega temperature logging"
 curdoc().add_periodic_callback(update, update_interval)
     
