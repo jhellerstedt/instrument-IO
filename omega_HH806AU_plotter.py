@@ -12,6 +12,7 @@ import serial
 import numpy as np
 
 from datetime import datetime as dt
+import datetime
 
 import omega_HH806AU as omega
 
@@ -25,12 +26,11 @@ from bokeh.layouts import column, row
 from tornado import gen
 
 
-
 ### set serial address
 serial_address = '/dev/cu.usbserial-AL00R9JJ'
 
 ##open the connection
-# omega.HH806AU_open_connection(serial_address)
+omega.HH806AU_open_connection(serial_address)
 
 
 ## set the log filename as a string
@@ -94,15 +94,14 @@ first_run = True
 global temp1_old, temp2_old
 temp1_old, temp2_old = omega.HH806AU_read_temp()
 
-
 global timer_zero
 timer_zero = time.time()
+
 
 @gen.coroutine
 def update():
     global t0, rollover_interval, first_run, log_interval, temp1_old, temp2_old, timer_zero
-    
-    # time.sleep(update_interval*1e-3)
+    global temp1, temp2
     
     ### replace with the function call to read the instrument you want
     temp1, temp2 = omega.HH806AU_read_temp()
@@ -121,7 +120,8 @@ def update():
         temp2_old = temp2    
   
     t1 = time.time()
-    timer_display.value = "{:.2}".format((t1-timer_zero)/60)
+    # timer_display.value = "{:.2}".format((t1-timer_zero)/60)
+    timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
     
     if t1 - t0 > log_interval or first_run == True:  ## take a log point every thirty minutes    
         first_run = False
@@ -132,14 +132,12 @@ def update():
         log.close()
         t0 = t1
         
-
-
-   
+  
 
 instrument_display1 = TextInput(title="T1", value=" ")
 instrument_display2 = TextInput(title="T2", value=" ")
 
-timer_display = TextInput(title="decimal minutes", value=" ")
+timer_display = TextInput(title="timer", value=" ")
 reset_button = Button(label="reset", button_type="default")
 
 @gen.coroutine

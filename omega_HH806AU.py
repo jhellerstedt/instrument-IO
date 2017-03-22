@@ -41,6 +41,8 @@ import serial
 import time
 import binascii
 
+import asyncio
+
 # serial_address = '/dev/cu.usbserial-AL00R9JJ'
 
 
@@ -67,7 +69,8 @@ def hex2temp(h, sign):
     if h == '':
         return 0
     else:
-        t = int(h[1:],16)/10.0
+        # t = int(h[1:],16)/10.0
+        t = int(h,16)/10.0
         if sign == '18':
             return 0
         if sign == '10':
@@ -75,7 +78,7 @@ def hex2temp(h, sign):
             return t
         else:
             return t
-
+            
 def HH806AU_read_temp():
     global ser
     try:
@@ -85,20 +88,33 @@ def HH806AU_read_temp():
         ### CH = channel identification, e.g. 00
         ### N = data access code, e.g., N
         ### check sum = hex of np.mod(sum(b"# LL ID CH N"), 256)
+        ### e.g. A2 = hex of np.mod(sum(b"#0A0000N"), 256)
         
         command = b"#0A0000NA2\r\n"
         
-        ser.write(command)
-        # r = ser.read(13) ## this is fastest; longest time step
-        r = ser.readline() ## use to read all information from omega
+        # command = b"#0A0001NA3\r\n"
+        
+        ser.reset_input_buffer()
+        ser.write(command)       
+        r = ser.read(15) ## this is fastest; longest time step
+        
+        ### !!!!! readline() times out according to the timeout set in ser  !!! don't use
+        # r = ser.readline() ## use to read all information from omega
+        
+        
 
     except serial.SerialException as e:
         print(e)
         return 0,0
+        
+    except NameError:
+        # return 0,0
+        r = b'>\x0f\x00\x00\x10\x00\xf6\x0b\x01\x10\x00\xfb\x0b\x01v\x00'
+        
     try:
         t1 = hex2temp(binascii.hexlify(r[5:7]), binascii.hexlify(r[4:5]))
         t2 = hex2temp(binascii.hexlify(r[10:12]), binascii.hexlify(r[9:10]))
     except:
         return 0,0
     
-    return t1, t2
+    return t1,t2
