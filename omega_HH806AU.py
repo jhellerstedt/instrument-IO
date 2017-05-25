@@ -71,9 +71,11 @@ def hex2temp(h, sign):
     else:
         # t = int(h[1:],16)/10.0
         t = int(h,16)/10.0
-        if sign == '18':
+        if sign == b'00':
             return 0
-        if sign == '10':
+        if sign == b'1f':
+            ### negative numbers are relative to b'ffff' = 65535
+            t = (65535 - int(h,16))/10.0
             t = -t
             return t
         else:
