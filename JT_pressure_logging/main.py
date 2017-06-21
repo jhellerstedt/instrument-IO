@@ -95,10 +95,13 @@ LL_display = TextInput(title="LL pressure", value=" ")
 prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
-layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
+# layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
+layout = row(LL_p)
 
 
-curdoc().add_root(layout)
+
 curdoc().title = "JT pressure status"
 curdoc().add_periodic_callback(plot_update, update_interval)
+
+curdoc().add_root(layout)
     
