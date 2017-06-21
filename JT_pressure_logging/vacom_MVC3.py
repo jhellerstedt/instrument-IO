@@ -56,7 +56,7 @@ def VACOM_read_pressure():
            
         tries = 0
     
-        while pressure[0] != '0' or tries>1:
+        while pressure[0] != '0' and tries<1:
             ser.write(read_command)
             time.sleep(.3)
             pressure = ''
@@ -72,7 +72,7 @@ def VACOM_read_pressure():
         print(e)
         return 0.
 
-    if pressure[0] == '0' and pressure[-1]:
+    if pressure[0] == '0':
         return float(pressure[3:-1])
     else:
         return 0.
