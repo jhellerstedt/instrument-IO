@@ -34,7 +34,7 @@ TOOLS="resize,crosshair,pan,wheel_zoom,box_zoom,reset,box_select,save"
 
 ## LL pressure plot
 
-LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime") # , lod_factor=16, lod_threshold=10
+LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
 
 LL_p.y_range.range_padding=0
 
@@ -47,7 +47,7 @@ LL_r = LL_p.line(x='x', y='LL_pressure', source=plot_source)
 
 ## prep pressure plot
 
-prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime") # , lod_factor=16, lod_threshold=10
+prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
 
 prep_p.y_range.range_padding=0
 
@@ -60,7 +60,7 @@ prep_r = prep_p.line(x='x', y='prep_pressure', source=plot_source)
 
 ## microscope pressure plot
 
-micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime") # , lod_factor=16, lod_threshold=10
+micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
 
 micro_p.y_range.range_padding=0
 
@@ -125,8 +125,7 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 
 l = layout([LL_display, prep_display, micro_display], 
-            [LL_p, prep_p, micro_p],
-            sizing_mode='scale_both')
+            [LL_p, prep_p, micro_p])
 curdoc().add_root(l)
 
 curdoc().title = "JT pressure status"
