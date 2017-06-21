@@ -36,7 +36,7 @@ micro_gauge.VACOM_open_serial('/dev/ttyUSB1')
 
 
 ## set the log filename as a string
-log_filename = "JT_pressure_log.txt"
+log_filename = "JT_pressure_logging/JT_pressure_log.txt"
 
 
 ### if the update_interval callback is 2000 ms or less, too fast for reading the pressure gauge
