@@ -21,7 +21,7 @@ from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter
 from bokeh.models.widgets import TextInput
-from bokeh.layouts import column, row
+from bokeh.layouts import column, row, layout
 
 import read_pressures
 from read_pressures import update_interval, rollover_interval
@@ -123,15 +123,16 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 # layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
 
-boxes = row(LL_display, prep_display, micro_display)
-plots = row(LL_p, prep_p, micro_p)
-layout = column(boxes, plots)
 
+l = layout([LL_display, prep_display, micro_display], 
+            [LL_p, prep_p, micro_p], 
+            sizing_mode='stretch_both')
+curdoc().add_root(l)
 
 curdoc().title = "JT pressure status"
 curdoc().add_periodic_callback(plot_update, update_interval)
 
-curdoc().add_root(layout)
+
 
 
     
