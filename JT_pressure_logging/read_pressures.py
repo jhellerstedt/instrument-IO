@@ -98,6 +98,7 @@ def update():
                 log.close()
                 t0 = t1
         except:
+            print("something wrong with gauge read")
             continue
         
 
