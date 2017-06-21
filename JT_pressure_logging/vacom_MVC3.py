@@ -55,7 +55,7 @@ def VACOM_read_pressure():
            
         tries = 0
     
-        while pressure[0] != '0' or tries>10:
+        while pressure[0] != '0' or tries>1:
             ser.write(read_command)
             time.sleep(.3)
             pressure = ''
