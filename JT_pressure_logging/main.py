@@ -96,11 +96,11 @@ prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
 # layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
-layout4 = row(LL_p, LL_display)
+layout1 = row(LL_p, LL_display)
 layout2 = row(prep_p, prep_display)
 layout3 = row(micro_p, micro_display)
 
-layout = column(layout4, layout2)
+layout = row(layout1, layout2, layout3)
 
 
 curdoc().title = "JT pressure status"
