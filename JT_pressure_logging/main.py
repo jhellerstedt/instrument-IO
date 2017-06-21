@@ -67,7 +67,7 @@ micro_p.y_range.range_padding=0
 micro_p.xaxis.axis_label = "time"
 micro_p.xaxis.formatter=DatetimeTickFormatter()
 
-micro_p.yaxis.axis_label = "prep pressure (mbar)"
+micro_p.yaxis.axis_label = "microscope pressure (mbar)"
 
 micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
@@ -122,11 +122,10 @@ prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
 # layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
-layout1 = row(LL_p, LL_display)
-layout2 = row(prep_p, prep_display)
-layout3 = row(micro_p, micro_display)
 
-layout = row(LL_p, prep_p, micro_p)
+boxes = row(LL_display, prep_display, micro_display)
+plots = row(LL_p, prep_p, micro_p)
+layout = column(boxes, plots)
 
 
 curdoc().title = "JT pressure status"
