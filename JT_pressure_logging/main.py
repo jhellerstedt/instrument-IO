@@ -30,7 +30,7 @@ from read_pressures import update_interval, rollover_interval
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
 
-TOOLS="resize,crosshair,pan,wheel_zoom,box_zoom,reset,box_select,save"
+TOOLS="resize,pan,wheel_zoom,box_zoom,reset,box_select,save"
 
 ## LL pressure plot
 
@@ -125,7 +125,8 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 
 l = layout([LL_display, prep_display, micro_display], 
-            [LL_p, prep_p, micro_p])
+            [LL_p, prep_p, micro_p],
+            sizing_mode='scale_both')
 curdoc().add_root(l)
 
 curdoc().title = "JT pressure status"
