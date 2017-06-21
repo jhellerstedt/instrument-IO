@@ -88,5 +88,5 @@ layout = row(LL_p,LL_display, prep_p,prep_display, micro_p,micro_display)
 
 curdoc().add_root(layout)
 curdoc().title = "JT pressure status"
-curdoc().add_periodic_callback(plot_update, update_interval)
+curdoc().add_periodic_callback(plot_update, read_pressures.update_interval)
     
