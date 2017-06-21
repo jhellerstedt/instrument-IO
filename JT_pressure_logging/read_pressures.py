@@ -28,11 +28,11 @@ import vacom_MVC3 as prep_gauge
 import vacom_MVC3 as micro_gauge
 
 ### initialize gauges:
-LL_gauge.TPG_open_serial('\dev\ttyUSB2')
+LL_gauge.TPG_open_serial('/dev/ttyUSB2')
 confirmation = LL_gauge.TPG_read_gauge1()
 
-prep_gauge.VACOM_open_serial('\dev\ttyUSB0')
-micro_gauge.VACOM_open_serial('\dev\ttyUSB1')
+prep_gauge.VACOM_open_serial('/dev/ttyUSB0')
+micro_gauge.VACOM_open_serial('/dev/ttyUSB1')
 
 
 ## set the log filename as a string
