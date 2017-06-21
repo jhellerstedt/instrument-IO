@@ -126,7 +126,7 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 l = layout([LL_display, prep_display, micro_display], 
             [LL_p, prep_p, micro_p],
-            sizing_mode='scale_both')
+            sizing_mode='scale_width')
 curdoc().add_root(l)
 
 curdoc().title = "JT pressure status"
