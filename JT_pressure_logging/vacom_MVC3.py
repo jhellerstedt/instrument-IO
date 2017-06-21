@@ -63,16 +63,17 @@ def VACOM_read_pressure():
             ser_tries = 0
             while ser.inWaiting() > 0 and ser_tries < 15:
                 pressure += ser.read(1).decode('utf-8')
-                ser_tries = ser_tries+1
-                print(pressure)       
+                ser_tries = ser_tries+1      
             tries = tries + 1
             time.sleep(.2)
         
     except serial.SerialException as e:
         print(e)
         return 0.
-
-    if pressure[0] == '0':
-        return float(pressure[3:-1])
-    else:
+    try:
+        if pressure[0] == '0':
+            return float(pressure[3:-1])
+        else:
+            return 0.
+    except:
         return 0.
