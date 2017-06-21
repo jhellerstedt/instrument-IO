@@ -23,7 +23,8 @@ from bokeh.models import ColumnDataSource, DatetimeTickFormatter
 from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row
 
-update_interval = 5000 ## ms
+import read_pressures
+from read_pressures import update_interval
 
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
