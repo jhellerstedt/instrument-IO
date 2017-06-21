@@ -79,6 +79,8 @@ def plot_update():
         prep_display.value = str(plot_source.data['prep_pressure'][-1])
         micro_display.value = str(plot_source.data['microscope_pressure'][-1])
     except:
+        print("something wrong in main")
+        print(read_pressures.source)
         pass
         
 
