@@ -68,7 +68,7 @@ micro_p.xaxis.formatter=DatetimeTickFormatter()
 
 micro_p.yaxis.axis_label = "microscope pressure (mbar)"
 
-micro_r = micro_p.line(x='x', y='microsope_pressure', source=plot_source)
+micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 
 def plot_update():
