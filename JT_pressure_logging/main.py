@@ -73,6 +73,7 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 
 def plot_update():
+   
     plot_source = read_pressures.source 
     LL_display.value = str(plot_source.data['LL_pressure'][-1])
     prep_display.value = str(plot_source.data['prep_pressure'][-1])
@@ -86,7 +87,7 @@ LL_display = TextInput(title="LL pressure", value=" ")
 prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
-layout = row(LL_p,LL_display, prep_p,prep_display, micro_p,micro_display)
+layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
 
 
 curdoc().add_root(layout)
