@@ -126,8 +126,7 @@ layout1 = row(LL_p, LL_display)
 layout2 = row(prep_p, prep_display)
 layout3 = row(micro_p, micro_display)
 
-layout = row(layout1, layout2)
-layout = row(layout, layout3)
+layout = row(LL_p, prep_p, micro_p)
 
 
 curdoc().title = "JT pressure status"
