@@ -96,7 +96,7 @@ prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
 # layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
-layout = row(LL_p, LL_display)
+layout = row(row(LL_p, LL_display), row(prep_p, prep_display), row(micro_p, micro_display))
 
 
 
