@@ -24,7 +24,7 @@ from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row
 
 import read_pressures
-from read_pressures import update_interval
+from read_pressures import update_interval, rollover_interval
 
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
@@ -74,10 +74,14 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 def plot_update():
     try:
-        plot_source = read_pressures.source 
-        LL_display.value = str(plot_source.data['LL_pressure'][-1])
-        prep_display.value = str(plot_source.data['prep_pressure'][-1])
-        micro_display.value = str(plot_source.data['microscope_pressure'][-1])
+        plot_source.stream(dict(x=[read_pressures.source.data['x'][-1]],
+            LL_pressure=[read_pressures.source.data['LL_pressure'][-1]],
+            prep_pressure=[read_pressures.source.data['prep_pressure'][-1]],
+            microscope_pressure=[read_pressures.source.data['microscope_pressure'][-1]]))
+            
+        LL_display.value = str(read_pressures.source.data['LL_pressure'][-1])
+        prep_display.value = str(read_pressures.source.data['prep_pressure'][-1])
+        micro_display.value = str(read_pressures.source.data['microscope_pressure'][-1])
     except:
         print("something wrong in main")
         print(read_pressures.source)
