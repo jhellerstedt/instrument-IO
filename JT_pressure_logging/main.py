@@ -71,7 +71,6 @@ micro_p.yaxis.axis_label = "prep pressure (mbar)"
 
 micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
-plot_source = read_pressures.source
 for ii in ['LL_pressure', 'prep_pressure', 'microscope_pressure']:
     LL_temp = np.asarray(read_pressures.source.data[ii])
     LL_temp[LL_temp <= 0.] = 1
@@ -95,7 +94,8 @@ def plot_update():
         plot_source.stream(dict(x=[temp_time],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
-            microscope_pressure=[micro_temp]), rollover=rollover_interval)
+            microscope_pressure=[micro_temp]), 
+            rollover=rollover_interval)
             
         LL_display.value = str(read_pressures.source.data['LL_pressure'][-1])
         prep_display.value = str(read_pressures.source.data['prep_pressure'][-1])
