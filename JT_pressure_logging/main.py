@@ -23,6 +23,8 @@ from bokeh.models import ColumnDataSource, DatetimeTickFormatter
 from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row
 
+update_interval = 5000 ## ms
+
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
@@ -88,5 +90,5 @@ layout = row(LL_p,LL_display, prep_p,prep_display, micro_p,micro_display)
 
 curdoc().add_root(layout)
 curdoc().title = "JT pressure status"
-curdoc().add_periodic_callback(plot_update, read_pressures.update_interval)
+curdoc().add_periodic_callback(plot_update, update_interval)
     
