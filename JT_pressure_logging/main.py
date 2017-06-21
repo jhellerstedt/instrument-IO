@@ -74,10 +74,21 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 def plot_update():
     try:
-        plot_source.stream(dict(x=[read_pressures.source.data['x'][-1]],
-            LL_pressure=[read_pressures.source.data['LL_pressure'][-1]],
-            prep_pressure=[read_pressures.source.data['prep_pressure'][-1]],
-            microscope_pressure=[read_pressures.source.data['microscope_pressure'][-1]]))
+        temp_time = read_pressures.source.data['x'][-1]
+        LL_temp = read_pressures.source.data['LL_pressure'][-1]
+        if LL_temp == 0.:
+            LL_temp = 1
+        prep_temp = read_pressures.source.data['prep_pressure'][-1]
+        if prep_temp == 0.:
+            prep_temp = 1
+        micro_temp = read_pressures.source.data['microscope_pressure'][-1]
+        if micro_temp == 0.:
+            micro_temp = 1
+        
+        plot_source.stream(dict(x=[temp_time],
+            LL_pressure=[LL_temp],
+            prep_pressure=[prep_temp],
+            microscope_pressure=[micro_temp]))
             
         LL_display.value = str(read_pressures.source.data['LL_pressure'][-1])
         prep_display.value = str(read_pressures.source.data['prep_pressure'][-1])
@@ -100,7 +111,7 @@ layout1 = row(LL_p, LL_display)
 layout2 = row(prep_p, prep_display)
 layout3 = row(micro_p, micro_display)
 
-layout = row(layout2, layout3)
+layout = row(layout1, layout2, layout3)
 
 
 curdoc().title = "JT pressure status"
