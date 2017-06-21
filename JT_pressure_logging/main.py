@@ -73,11 +73,13 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 
 def plot_update():
-   
-    plot_source = read_pressures.source 
-    LL_display.value = str(plot_source.data['LL_pressure'][-1])
-    prep_display.value = str(plot_source.data['prep_pressure'][-1])
-    micro_display.value = str(plot_source.data['microscope_pressure'][-1])
+    try:
+        plot_source = read_pressures.source 
+        LL_display.value = str(plot_source.data['LL_pressure'][-1])
+        prep_display.value = str(plot_source.data['prep_pressure'][-1])
+        micro_display.value = str(plot_source.data['microscope_pressure'][-1])
+    except:
+        pass
         
 
 
