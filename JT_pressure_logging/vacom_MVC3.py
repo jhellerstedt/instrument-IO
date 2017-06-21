@@ -29,7 +29,8 @@ def VACOM_open_serial(serial_address):
             baudrate=19200,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS
+            bytesize=serial.EIGHTBITS,
+            timeout=2
         )
     except serial.SerialException as e:
         print(e)
