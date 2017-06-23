@@ -76,27 +76,27 @@ t0_two = time.time()
 
 first_run = True
 
-global LL_temp, prep_temp, micro_temp
+global current_LL, current_prep, current_micro
 
 
 def update():
-    global t0, t0_two, rollover_interval, first_run, log_interval, LL_temp, prep_temp, micro_temp
+    global t0, t0_two, rollover_interval, first_run, log_interval, current_LL, current_prep, current_micro
     
     while True:
         time.sleep(update_interval/1e3) ##convert ms to s
         try:
             ### replace with the function call to read the instrument you want
-            LL_temp = LL_gauge.TPG_read_pressure()
-            prep_temp = prep_gauge.VACOM_read_pressure()
-            micro_temp = micro_gauge.VACOM_read_pressure()
+            current_LL = LL_gauge.TPG_read_pressure()
+            current_prep = prep_gauge.VACOM_read_pressure()
+            current_micro = micro_gauge.VACOM_read_pressure()
         
             ts = dt.now()
             t1 = time.time()
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
                 ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
-                source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], 
-                                        microscope_pressure=[micro_temp]),rollover=rollover_interval)
+                source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[current_LL], prep_pressure=[current_prep], 
+                                        microscope_pressure=[current_micro]),rollover=rollover_interval)
                 t0_two = t1
   
             
