@@ -31,16 +31,18 @@ LL_gauge.TPG_open_serial('/dev/ttyUSB2')
 confirmation = LL_gauge.TPG_read_gauge1()
 
 def read_prep():
+    vacom_MVC3.VACOM_open_serial('/dev/ttyUSB1')
+    pressure = vacom_MVC3.VACOM_read_pressure()
+    vacom_MVC3.VACOM_close_serial('/dev/ttyUSB1')
+    return pressure
+
+def read_micro():
     vacom_MVC3.VACOM_open_serial('/dev/ttyUSB0')
     pressure = vacom_MVC3.VACOM_read_pressure()
     vacom_MVC3.VACOM_close_serial('/dev/ttyUSB0')
     return pressure
     
-def read_micro():
-    vacom_MVC3.VACOM_open_serial('/dev/ttyUSB1')
-    pressure = vacom_MVC3.VACOM_read_pressure()
-    vacom_MVC3.VACOM_close_serial('/dev/ttyUSB1')
-    return pressure
+
 
 
 ## set the log filename as a string
