@@ -24,7 +24,13 @@ from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row, layout
 
 import read_pressures
-from read_pressures import update_interval, rollover_interval
+from read_pressures import update_interval, LL_temp, prep_temp, micro_temp
+from read_pressures import rollover_interval as read_rollover_interval
+
+
+total_axis_hours = 24
+total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms
+rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
@@ -82,22 +88,22 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
         ii = 1
     if kk <= 0.:
         kk = 1
-    plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=rollover_interval)
+    plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=read_rollover_interval)
     
 
 
 def plot_update():
     try:
-        temp_time = read_pressures.source.data['x'][-1]
-        LL_temp = read_pressures.source.data['LL_pressure'][-1]
-        if LL_temp == 0.:
-            LL_temp = 1
-        prep_temp = read_pressures.source.data['prep_pressure'][-1]
-        if prep_temp == 0.:
-            prep_temp = 1
-        micro_temp = read_pressures.source.data['microscope_pressure'][-1]
-        if micro_temp == 0.:
-            micro_temp = 1
+        temp_time = (dt.timestamp(dt.now())+3600)*1e3
+        # LL_temp = read_pressures.source.data['LL_pressure'][-1]
+        # if LL_temp == 0.:
+        #     LL_temp = 1
+        # prep_temp = read_pressures.source.data['prep_pressure'][-1]
+        # if prep_temp == 0.:
+        #     prep_temp = 1
+        # micro_temp = read_pressures.source.data['microscope_pressure'][-1]
+        # if micro_temp == 0.:
+        #     micro_temp = 1
         
         plot_source.stream(dict(x=[temp_time],
             LL_pressure=[LL_temp],

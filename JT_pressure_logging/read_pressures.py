@@ -41,14 +41,16 @@ log_filename = "JT_pressure_logging/JT_pressure_log.txt"
 
 ### if the update_interval callback is 2000 ms or less, too fast for reading the pressure gauge
 update_interval = 5000 ## ms
+data_interval = 3 ## minutes; spacing between data points in total_axis "buffer"
 total_axis_hours = 24 ## total hours to keep in bokeh plot
 log_interval = 30 ## minutes interval to write data points to log file
 
 log_interval = log_interval * 60
-total_axis_hours = np.multiply(total_axis_hours,3.6e6)
+total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms
+data_interval = data_interval * 60 * 1e3 ## minutes to ms
 
 global rollover_interval
-rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
+rollover_interval = int(np.floor(np.divide(total_axis_hours, data_interval)))
 
 source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
@@ -68,13 +70,17 @@ try:
 except FileNotFoundError:
     pass    
     
-global t0, first_run
+global t0, t0_two, first_run
 t0 = time.time()
+t0_two = time.time()
+
 first_run = True
+
+global LL_temp, prep_temp, micro_temp
 
 
 def update():
-    global t0, rollover_interval, first_run, log_interval
+    global t0, t0_two, rollover_interval, first_run, log_interval, LL_temp, prep_temp, micro_temp
     
     while True:
         time.sleep(update_interval/1e3) ##convert ms to s
@@ -85,10 +91,15 @@ def update():
             micro_temp = micro_gauge.VACOM_read_pressure()
         
             ts = dt.now()
-            ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
-            source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], microscope_pressure=[micro_temp]),rollover=rollover_interval)
-  
             t1 = time.time()
+            
+            if t1 - t0_two > data_interval * 1e-3 or first_run == True:
+                ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
+                source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], 
+                                        microscope_pressure=[micro_temp]),rollover=rollover_interval)
+                t0_two = t1
+  
+            
             if t1 - t0 > log_interval or first_run == True:  ## take a log point every thirty minutes    
                 first_run = False
                 ts = str(ts)
