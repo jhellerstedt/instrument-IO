@@ -24,15 +24,23 @@ from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row
 
 import pfeiffer_TPG261 as LL_gauge
-import vacom_MVC3 as prep_gauge
-import vacom_MVC3 as micro_gauge
+import vacom_MVC3
 
 ### initialize gauges:
 LL_gauge.TPG_open_serial('/dev/ttyUSB2')
 confirmation = LL_gauge.TPG_read_gauge1()
 
-prep_gauge.VACOM_open_serial('/dev/ttyUSB0')
-micro_gauge.VACOM_open_serial('/dev/ttyUSB1')
+def read_prep():
+    vacom_MVC3.VACOM_open_serial('/dev/ttyUSB0')
+    pressure = vacom_MVC3.VACOM_read_pressure()
+    vacom_MVC3.VACOM_close_serial('/dev/ttyUSB0')
+    return pressure
+    
+def read_micro():
+    vacom_MVC3.VACOM_open_serial('/dev/ttyUSB1')
+    pressure = vacom_MVC3.VACOM_read_pressure()
+    vacom_MVC3.VACOM_close_serial('/dev/ttyUSB1')
+    return pressure
 
 
 ## set the log filename as a string
@@ -87,8 +95,8 @@ def update():
         try:
             ### replace with the function call to read the instrument you want
             current_LL = LL_gauge.TPG_read_pressure()
-            current_prep = prep_gauge.VACOM_read_pressure()
-            current_micro = micro_gauge.VACOM_read_pressure()
+            current_prep = read_prep()
+            current_micro = read_micro()
         
             ts = dt.now()
             t1 = time.time()
