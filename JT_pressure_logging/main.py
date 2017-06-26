@@ -150,7 +150,7 @@ def log_history_update(channel_selected, start_date, end_date):
         # print(dt.strptime(end_date, "%Y-%m-%d"))
         
         historical_source = ColumnDataSource(data=dict(x=[], y=[]))
-        print(channel_selected)
+        # print(channel_selected)
         
         for line in iter(f):
             ts, pressure = str.split(line, '\t', 1)
@@ -182,7 +182,7 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 ### widgets for historical data display:
 
-menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressue"), ("microscope", "microscope_pressure")]
+menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu)
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
