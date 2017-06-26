@@ -155,10 +155,16 @@ def log_history_update(channel_selected, start_date, end_date):
             micro_temp = float(micro_temp)
             if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
                 if channel_selected == "LL_pressure":
+                    if LL_temp == 0.:
+                        LL_temp = 1.
                     historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]))
                 if channel_selected == "prep_pressure":
+                    if prep_temp == 0.:
+                        prep_temp = 1.
                     historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[prep_temp]))
                 if channel_selected == "microscope_pressure":
+                    if micro_temp == 0.:
+                        micro_temp = 1.
                     historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[micro_temp]))
         f.close()
     except:
@@ -198,7 +204,7 @@ channel_selection.on_click(change_title)
 
 l = layout([LL_display, prep_display, micro_display], 
             [LL_p, prep_p, micro_p],
-            [column(channel_selection, start_date_widget, end_date_widget, update_hist_data)],
+            [hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data)],
             sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
