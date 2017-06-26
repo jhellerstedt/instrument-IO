@@ -148,7 +148,7 @@ def log_history_update(channel_selected, start_date, end_date):
         # ts, pressure = str.split(f.readline(), '\t', 1)
         # print(dt.strptime(ts, "%Y-%m-%d %H:%M:%S"))
         # print(dt.strptime(end_date, "%Y-%m-%d"))
-        historical_source.data(dict(x=[], y=[]))
+        historical_source.data(x=[], y=[])
         
         for line in iter(f):
             ts, pressure = str.split(line, '\t', 1)
