@@ -163,13 +163,12 @@ def log_history_update(channel_selected, start_date, end_date):
             micro_temp = float(micro_temp)
             if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
                 if channel_selected == "LL_pressure" and LL_temp != 0.:
-                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]),rollover=rollover)
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]))
                 if channel_selected == "prep_pressure" and prep_temp != 0.:
-                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[prep_temp]),rollover=rollover)
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[prep_temp]))
                 if channel_selected == "microscope_pressure" and micro_temp != 0.:
-                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[micro_temp]),rollover=rollover)
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[micro_temp]))
         f.close()
-        print(len(historical_source.data['y']))
     except:
         print("something wrong with log file read")
         pass
