@@ -35,7 +35,9 @@ rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
-historical_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
+historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+
+
 
 
 TOOLS="resize,pan,wheel_zoom,box_zoom,reset,box_select,save"
@@ -90,6 +92,8 @@ hist_p.xaxis.formatter=DatetimeTickFormatter()
 
 hist_p.yaxis.axis_label = "pressure (mbar)"
 
+hist_r = hist_p.line(x='x', y='y', source=historical_source)
+
 
 ## remove zero's for plotting:
     
@@ -138,7 +142,7 @@ def log_history_update(channel_selected, start_date, end_date):
     
     historical_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], 
                                             microscope_pressure=[]))    
-    hist_r = hist_p.line(x='x', y=channel_selected, source=historical_source)
+    
     #### populate plot with old data if possible:
     try:
         f = open(log_filename)
@@ -151,8 +155,12 @@ def log_history_update(channel_selected, start_date, end_date):
             prep_temp = float(prep_temp)
             micro_temp = float(micro_temp)
             if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
-                historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], 
-                                            prep_pressure=[prep_temp], microscope_pressure=[micro_temp]))
+                if channel_selected == "LL_pressure":
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]))
+                if channel_selected == "prep_pressure":
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[prep_temp]))
+                if channel_selected == "microscope_pressure":
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[micro_temp]))
         f.close()
     except:
         pass
