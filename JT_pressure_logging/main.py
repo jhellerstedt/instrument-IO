@@ -35,7 +35,7 @@ rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
-historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+historical_source = ColumnDataSource(data=dict(x=[(dt.timestamp(dt.now())+3600)*1e3], y=[1]))
 
 
 
