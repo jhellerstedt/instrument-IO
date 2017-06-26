@@ -178,7 +178,7 @@ def update_plot():
     return
 update_hist_data.on_click(update_plot)
 
-hist_layout = column(hist_p, column(channel_selection, start_date, end_date, update_hist_data))
+hist_layout = column(hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data))
 
 
 
