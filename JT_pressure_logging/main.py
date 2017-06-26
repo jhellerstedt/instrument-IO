@@ -188,7 +188,7 @@ def update_plot():
     return
 update_hist_data.on_click(update_plot)
 
-hist_layout = column(hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data))
+# hist_layout = column(hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data))
 
 
 
@@ -196,8 +196,8 @@ l = layout([LL_display, prep_display, micro_display],
             [LL_p, prep_p, micro_p],
             sizing_mode='scale_width')
             
-l2 = column(l, hist_layout)
-curdoc().add_root(l2)
+# l2 = column(l, hist_layout)
+curdoc().add_root(l)
 
 curdoc().title = "JT pressure status"
 curdoc().add_periodic_callback(plot_update, update_interval)
