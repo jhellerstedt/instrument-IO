@@ -20,11 +20,11 @@ from datetime import datetime as dt
 from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter
-from bokeh.models.widgets import TextInput
+from bokeh.models.widgets import TextInput, Button, DatePicker, Dropdown
 from bokeh.layouts import column, row, layout
 
 import read_pressures
-from read_pressures import update_interval, LL_temp, prep_temp, micro_temp
+from read_pressures import update_interval, LL_temp, prep_temp, micro_temp, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
 
 
@@ -34,6 +34,8 @@ rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
+
+historical_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
 
 TOOLS="resize,pan,wheel_zoom,box_zoom,reset,box_select,save"
@@ -76,6 +78,18 @@ micro_p.xaxis.formatter=DatetimeTickFormatter()
 micro_p.yaxis.axis_label = "microscope pressure (mbar)"
 
 micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
+
+### historical range plot:
+
+hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
+
+hist_p.y_range.range_padding=0
+
+hist_p.xaxis.axis_label = "time"
+hist_p.xaxis.formatter=DatetimeTickFormatter()
+
+hist_p.yaxis.axis_label = "pressure (mbar)"
+
 
 ## remove zero's for plotting:
     
@@ -120,6 +134,29 @@ def plot_update():
         pass
         
 
+def log_history_update(channel_selected, start_date, end_date):
+    
+    historical_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], 
+                                            microscope_pressure=[]))    
+    hist_r = hist_p.line(x='x', y=channel_selected, source=historical_source)
+    #### populate plot with old data if possible:
+    try:
+        f = open(log_filename)
+        for line in iter(f):
+            ts, pressure = str.split(line, '\t', 1)
+            LL_temp, pressure = str.split(pressure, '\t', 1)
+            prep_temp, micro_temp = str.split(pressure, '\t', 1)
+            ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
+            LL_temp = float(LL_temp)
+            prep_temp = float(prep_temp)
+            micro_temp = float(micro_temp)
+            if ts > start_date and ts < end_date:
+                historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], 
+                                            prep_pressure=[prep_temp], microscope_pressure=[micro_temp]))
+        f.close()
+    except:
+        pass
+
 
     
 
@@ -127,13 +164,30 @@ LL_display = TextInput(title="LL pressure", value=" ")
 prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
-# layout = row(LL_p, LL_display, prep_p, prep_display, micro_p, micro_display)
+### widgets for historical data display:
+
+menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressue"), ("microscope", "microscope_pressure")]
+channel_selection = Dropdown(label="select channel", button_type="success", menu=menu)
+start_date = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
+end_date = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
+update_hist_data = Button(title="update plot")
+
+##callback to update history plot:
+def update_plot():
+    log_history_update(channel_selection.value(), start_date.value(), end_date.value())
+    return
+update_hist_data.on_click(update_plot)
+
+hist_layout = column(hist_p, column(channel_selection, start_date, end_date, update_hist_data))
+
 
 
 l = layout([LL_display, prep_display, micro_display], 
             [LL_p, prep_p, micro_p],
             sizing_mode='scale_width')
-curdoc().add_root(l)
+            
+l2 = column(l, hist_layout)
+curdoc().add_root(l2)
 
 curdoc().title = "JT pressure status"
 curdoc().add_periodic_callback(plot_update, update_interval)
