@@ -150,6 +150,7 @@ def log_history_update(channel_selected, start_date, end_date):
         # print(dt.strptime(end_date, "%Y-%m-%d"))
         
         historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+        print(channel_selected)
         
         for line in iter(f):
             ts, pressure = str.split(line, '\t', 1)
