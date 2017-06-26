@@ -21,7 +21,7 @@ from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter
 from bokeh.models.widgets import TextInput, Button, DatePicker, Dropdown
-from bokeh.layouts import column, row, layout
+from bokeh.layouts import column, row, layout, widgetbox
 
 import read_pressures
 from read_pressures import update_interval, LL_temp, prep_temp, micro_temp, log_filename
@@ -200,12 +200,12 @@ channel_selection.on_click(change_title)
 
 # hist_layout = column(hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data))
 
-
+hist_widgets = widgetbox(channel_selection, start_date_widget, end_date_widget, update_hist_data)
 
 l = layout([LL_display, prep_display, micro_display], 
             [LL_p, prep_p, micro_p],
-            [hist_p, [[channel_selection], [start_date_widget], [end_date_widget], [update_hist_data]]])
-            # sizing_mode='scale_width')
+            [hist_p, hist_widgets],
+            sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
 curdoc().add_root(l)
