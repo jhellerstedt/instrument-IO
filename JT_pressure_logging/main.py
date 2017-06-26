@@ -139,10 +139,7 @@ def plot_update():
         
 
 def log_history_update(channel_selected, start_date, end_date):
-    
-    
-    
-    #### populate plot with old data if possible:
+
     try:
         f = open(log_filename)
         # ts, pressure = str.split(f.readline(), '\t', 1)
@@ -163,7 +160,6 @@ def log_history_update(channel_selected, start_date, end_date):
             micro_temp = float(micro_temp)
             if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
                 if channel_selected == "LL_pressure" and LL_temp != 0.:
-                    print("streaming point")
                     historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]))
                 if channel_selected == "prep_pressure" and prep_temp != 0.:
                     historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[prep_temp]))
