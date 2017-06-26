@@ -203,8 +203,7 @@ channel_selection.on_click(change_title)
 
 
 l = layout([LL_display, prep_display, micro_display], 
-            [LL_p, prep_p, micro_p],
-            [hist_p],
+            [LL_p, prep_p, micro_p, hist_p],
             sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
