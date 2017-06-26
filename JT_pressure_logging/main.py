@@ -140,11 +140,12 @@ def plot_update():
 
 def log_history_update(channel_selected, start_date, end_date):
     
-    historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+    rollover=int(1e6)
     
     #### populate plot with old data if possible:
     try:
         f = open(log_filename)
+        print("sup looking through data")
         for line in iter(f):
             ts, pressure = str.split(line, '\t', 1)
             LL_temp, pressure = str.split(pressure, '\t', 1)
@@ -154,20 +155,15 @@ def log_history_update(channel_selected, start_date, end_date):
             prep_temp = float(prep_temp)
             micro_temp = float(micro_temp)
             if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
-                if channel_selected == "LL_pressure":
-                    if LL_temp == 0.:
-                        LL_temp = 1.
-                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]))
-                if channel_selected == "prep_pressure":
-                    if prep_temp == 0.:
-                        prep_temp = 1.
-                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[prep_temp]))
-                if channel_selected == "microscope_pressure":
-                    if micro_temp == 0.:
-                        micro_temp = 1.
-                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[micro_temp]))
+                if channel_selected == "LL_pressure" and LL_temp != 0.:
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]),rollover=rollover)
+                if channel_selected == "prep_pressure" and prep_temp != 0.:
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[prep_temp]),rollover=rollover)
+                if channel_selected == "microscope_pressure" and micro_temp != 0.:
+                    historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[micro_temp]),rollover=rollover)
         f.close()
     except:
+        print("something wrong with log file read")
         pass
 
 
