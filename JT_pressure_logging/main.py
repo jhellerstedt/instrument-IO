@@ -204,6 +204,7 @@ hist_widgets = widgetbox(channel_selection, start_date_widget, end_date_widget, 
 
 l = layout([LL_display, prep_display, micro_display], 
             [LL_p, prep_p, micro_p],
+            [hist_p],
             [hist_widgets])
             # sizing_mode='scale_width')
             
