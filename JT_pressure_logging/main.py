@@ -168,13 +168,13 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressue"), ("microscope", "microscope_pressure")]
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu)
-start_date = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
-end_date = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
+start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
+end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 update_hist_data = Button(label="update plot")
 
 ##callback to update history plot:
 def update_plot():
-    log_history_update(channel_selection.value(), start_date.value(), end_date.value())
+    log_history_update(channel_selection.value, start_date_widget.value, end_date_widget.value)
     return
 update_hist_data.on_click(update_plot)
 
