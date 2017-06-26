@@ -140,8 +140,7 @@ def plot_update():
 
 def log_history_update(channel_selected, start_date, end_date):
     
-    historical_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], 
-                                            microscope_pressure=[]))    
+    historical_source = ColumnDataSource(data=dict(x=[], y=[]))
     
     #### populate plot with old data if possible:
     try:
@@ -188,7 +187,7 @@ def update_plot():
     return
 update_hist_data.on_click(update_plot)
 
-def change_title():
+def change_title(attr):
     channel_selection.label = channel_selection.value
     return
 channel_selection.on_click(change_title)
