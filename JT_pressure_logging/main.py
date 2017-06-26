@@ -149,8 +149,8 @@ def log_history_update(channel_selected, start_date, end_date):
         # print(dt.strptime(ts, "%Y-%m-%d %H:%M:%S"))
         # print(dt.strptime(end_date, "%Y-%m-%d"))
         
-        historical_source = ColumnDataSource(data=dict(x=[(dt.timestamp(dt.now())+3600)*1e3], y=[1]))
-        rollover=len(f)
+        historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+        rollover=int(1e5)
         # print(channel_selected)
         
         for line in iter(f):
