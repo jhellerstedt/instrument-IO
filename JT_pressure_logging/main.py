@@ -145,7 +145,10 @@ def log_history_update(channel_selected, start_date, end_date):
     #### populate plot with old data if possible:
     try:
         f = open(log_filename)
-        print("sup looking through data")
+        ts, pressure = str.split(f.readline(), '\t', 1)
+        print(dt.strptime(ts, "%Y-%m-%d %H:%M:%S"))
+        print(dt.strptime(end_date, "%Y-%m-%d"))
+        
         for line in iter(f):
             ts, pressure = str.split(line, '\t', 1)
             LL_temp, pressure = str.split(pressure, '\t', 1)
