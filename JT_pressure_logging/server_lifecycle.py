@@ -9,13 +9,16 @@ Created on Mon Dec 19 17:29:28 2016
 import threading
 from threading import Thread
 
+from tornado import gen
+
 import read_pressures
 
+@gen.coroutine
 def on_server_loaded(server_context):
-    # t = Thread(target=read_pressures.update, args=())
-    # t.setDaemon(True)
-    # t.start()
-    read_pressures.update
+    t = Thread(target=read_pressures.update, args=())
+    t.setDaemon(True)
+    t.start()
+    # read_pressures.update
     
 def on_server_unloaded(server_context):
     # read_pressures.LL_gauge.TPG_close_serial('\dev\ttyUSB2')
