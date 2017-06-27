@@ -118,7 +118,7 @@ def update():
                 ts = str(ts)
                 ts = ts[:19]
                 log = open(log_filename, 'a')
-                log.write(ts + "\t" + str(LL_temp) + "\t" + str(prep_temp) + "\t" + str(micro_temp) + "\n")
+                log.write(ts + "\t" + str(current_LL) + "\t" + str(current_prep) + "\t" + str(current_micro) + "\n")
                 log.close()
                 t0 = t1
         except:
