@@ -73,14 +73,8 @@ try:
         prep_temp, micro_temp = str.split(pressure, '\t', 1)
         ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
         LL_temp = float(LL_temp)
-        if LL_temp == 0.:
-            LL_temp = None
         prep_temp = float(prep_temp)
-        if prep_temp == 0.:
-            prep_temp = None
         micro_temp = float(micro_temp)
-        if micro_temp == 0.:
-            micro_temp = None
         source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], microscope_pressure=[micro_temp]),rollover=rollover_interval)
     f.close()
 except FileNotFoundError:
@@ -103,14 +97,8 @@ def update():
         try:
             ### replace with the function call to read the instrument you want
             current_LL = LL_gauge.TPG_read_pressure()
-            if current_LL == 0.:
-                current_LL = None
             current_prep = read_prep()
-            if current_prep == 0.:
-                current_prep = None
             current_micro = read_micro()
-            if current_micro == 0.:
-                current_micro = None
         
             ts = dt.now()
             t1 = time.time()
