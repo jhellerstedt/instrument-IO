@@ -185,7 +185,7 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=100)
-channel_selection.value = menu[0][0] ## seed initial value
+
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10], width=100)
@@ -199,13 +199,17 @@ def update_plot():
     return
 update_hist_data.on_click(update_plot)
 
-### seed initial values:
-update_plot()
+
 
 def change_title(attr):
     channel_selection.label = channel_selection.value
     return
 channel_selection.on_click(change_title)
+
+### seed initial values:
+channel_selection.value = "LL_pressure" ## seed initial value
+change_title("title")
+update_plot()
 
 # hist_layout = column(hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data))
 
