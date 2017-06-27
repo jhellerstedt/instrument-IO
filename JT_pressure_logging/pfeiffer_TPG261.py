@@ -47,8 +47,9 @@ def TPG_read_gauge1():
     try:
         ser.write(b'PR1\r') ## command to read gauge 1
         ## should return  ACK (hex 06) CR LF
-        print(ser.readline())
+        response = ser.readline()
     except serial.SerialException as e:
+        print(response)
         print(e)
         return
     return

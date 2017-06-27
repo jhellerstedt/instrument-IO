@@ -18,7 +18,7 @@ from datetime import timedelta
 
 #import matplotlib.pyplot as plt
 
-
+from bokeh.client import push_session
 from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter
@@ -29,6 +29,8 @@ import read_pressures
 from read_pressures import update_interval, current_LL, current_prep, current_micro, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
 
+
+session = push_session(curdoc())
 
 total_axis_hours = 24
 total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms
@@ -236,7 +238,7 @@ curdoc().add_root(l)
 curdoc().title = "JT pressure status"
 curdoc().add_periodic_callback(plot_update, update_interval)
 
-
+session.loop_until_closed()
 
 
     
