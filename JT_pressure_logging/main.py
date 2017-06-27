@@ -184,12 +184,13 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 ### widgets for historical data display:
 
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
-channel_selection = Dropdown(label="select channel", button_type="success", menu=menu)
+channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=100)
+channel_selection.value = menu.keys()[0] ## seed initial value
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
-start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10])
-end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now())[:10])
-update_hist_data = Button(label="update plot")
+start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10], width=100)
+end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now())[:10], width=100)
+update_hist_data = Button(label="update plot", width=100)
 
 
 ##callback to update history plot:
@@ -212,8 +213,8 @@ hist_widgets = widgetbox(channel_selection, start_date_widget, end_date_widget, 
 
 l = layout([LL_display, prep_display, micro_display], 
             [LL_p, prep_p, micro_p],
-            [hist_p, hist_widgets],
-            sizing_mode='scale_width')
+            [hist_p, hist_widgets])
+            # sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
 curdoc().add_root(l)
