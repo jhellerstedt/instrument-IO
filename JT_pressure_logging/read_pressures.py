@@ -87,6 +87,9 @@ t0_two = time.time()
 first_run = True
 
 global current_LL, current_prep, current_micro
+current_LL = 0
+current_prep = 0
+current_micro = 0
 
 
 def update():
