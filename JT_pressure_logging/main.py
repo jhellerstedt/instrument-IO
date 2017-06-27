@@ -86,7 +86,7 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 ### historical range plot:
 
-hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
+hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=700, plot_height=350) # , lod_factor=16, lod_threshold=10
 
 hist_p.y_range.range_padding=0
 
@@ -104,11 +104,11 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
                             read_pressures.source.data['prep_pressure'], 
                             read_pressures.source.data['microscope_pressure']):
     if ii <= 0.:
-        ii = 1
+        ii = None
     if jj <= 0.:
-        ii = 1
+        ii = None
     if kk <= 0.:
-        kk = 1
+        kk = None
     plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=read_rollover_interval)
     
 
@@ -183,14 +183,16 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 ### widgets for historical data display:
 
+widget_width = 125
+
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
-channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=100)
+channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=widget_width)
 
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
-start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10], width=100)
-end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now())[:10], width=100)
-update_hist_data = Button(label="update plot", width=100)
+start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10], width=widget_width)
+end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now())[:10], width=widget_width)
+update_hist_data = Button(label="update plot", width=widget_width)
 
 
 ##callback to update history plot:
