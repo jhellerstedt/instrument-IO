@@ -13,6 +13,7 @@ import numpy as np
 #import pandas as pd
 
 from datetime import datetime as dt
+from datetime import timedelta
 
 #import matplotlib.pyplot as plt
 
@@ -35,7 +36,8 @@ rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
-historical_source = ColumnDataSource(data=dict(x=[(dt.timestamp(dt.now())+3600)*1e3], y=[1]))
+# historical_source = ColumnDataSource(data=dict(x=[(dt.timestamp(dt.now())+3600)*1e3], y=[1]))
+historical_source = ColumnDataSource(data=dict(x=[], y=[]))
 
 
 
@@ -183,9 +185,12 @@ menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("mi
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu)
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
-start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value="2017-01-01")
+start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10])
 end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now())[:10])
 update_hist_data = Button(label="update plot")
+
+### seed initial history data:
+log_history_update("LL_pressure", start_date_widget.value, end_date_widget.value)
 
 ##callback to update history plot:
 def update_plot():
