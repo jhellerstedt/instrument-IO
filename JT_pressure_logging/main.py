@@ -10,7 +10,8 @@ import os
 import time
 import serial
 import numpy as np
-#import pandas as pd
+
+from tornado import gen
 
 from datetime import datetime as dt
 from datetime import timedelta
@@ -111,7 +112,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
     plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=read_rollover_interval)
     
 
-
+@gen.coroutine
 def plot_update():
     try:
         temp_time = (dt.timestamp(dt.now())+3600)*1e3
@@ -139,7 +140,7 @@ def plot_update():
         print(read_pressures.source)
         pass
         
-
+@gen.coroutine
 def log_history_update(channel_selected, start_date, end_date):
 
     try:
