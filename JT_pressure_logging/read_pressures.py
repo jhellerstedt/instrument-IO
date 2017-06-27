@@ -131,4 +131,4 @@ def update():
             continue
         
 
-    
+update()    
