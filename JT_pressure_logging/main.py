@@ -104,11 +104,11 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
                             read_pressures.source.data['prep_pressure'], 
                             read_pressures.source.data['microscope_pressure']):
     if ii <= 0.:
-        ii = None
+        ii = float('nan')
     if jj <= 0.:
-        ii = None
+        ii = float('nan')
     if kk <= 0.:
-        kk = None
+        kk = float('nan')
     plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=read_rollover_interval)
     
 

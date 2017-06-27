@@ -69,11 +69,11 @@ def VACOM_read_pressure():
         
     except serial.SerialException as e:
         print(e)
-        return 0.
+        return float('nan')
     try:
         if pressure[0] == '0':
             return float(pressure[3:-1])
         else:
-            return 0.
+            return float('nan')
     except:
-        return 0.
+        return float('nan')

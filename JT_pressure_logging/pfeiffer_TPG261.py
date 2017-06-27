@@ -58,9 +58,9 @@ def TPG_read_pressure():
         
     except serial.SerialException as e:
         print(e)
-        return 0.
+        return float('nan')
 
     if answer[0] == '0':
         return float(answer[3:13]) ## these are the digits of the pressure, convert to float
     else:
-        return 0.
+        return float('nan')
