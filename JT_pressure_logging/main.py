@@ -30,8 +30,6 @@ from read_pressures import update_interval, current_LL, current_prep, current_mi
 from read_pressures import rollover_interval as read_rollover_interval
 
 
-session = push_session(curdoc())
-
 total_axis_hours = 24
 total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms
 rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
@@ -237,8 +235,6 @@ curdoc().add_root(l)
 
 curdoc().title = "JT pressure status"
 curdoc().add_periodic_callback(plot_update, update_interval)
-
-session.loop_until_closed()
 
 
     
