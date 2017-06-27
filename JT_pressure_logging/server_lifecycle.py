@@ -6,7 +6,7 @@ Created on Mon Dec 19 17:29:28 2016
 @author: jack
 """
 
-
+import threading
 from threading import Thread
 
 import read_pressures
