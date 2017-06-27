@@ -185,7 +185,7 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=100)
-channel_selection.value = menu.keys()[0] ## seed initial value
+channel_selection.value = menu[0][0] ## seed initial value
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10], width=100)
