@@ -26,7 +26,7 @@ from bokeh.models.widgets import TextInput, Button, DatePicker, Dropdown
 from bokeh.layouts import column, row, layout, widgetbox
 
 import read_pressures
-from read_pressures import update_interval, LL_temp, prep_temp, micro_temp, log_filename
+from read_pressures import update_interval, current_LL, current_prep, current_micro, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
 
 
@@ -127,9 +127,9 @@ def plot_update():
         #     micro_temp = 1
         
         plot_source.stream(dict(x=[temp_time],
-            LL_pressure=[LL_temp],
-            prep_pressure=[prep_temp],
-            microscope_pressure=[micro_temp]), 
+            LL_pressure=[current_LL],
+            prep_pressure=[current_prep],
+            microscope_pressure=[current_micro]), 
             rollover=rollover_interval)
             
         LL_display.value = str(read_pressures.source.data['LL_pressure'][-1])
