@@ -148,7 +148,8 @@ def log_history_update(channel_selected, start_date, end_date):
         # print(dt.strptime(ts, "%Y-%m-%d %H:%M:%S"))
         # print(dt.strptime(end_date, "%Y-%m-%d"))
         
-        historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+        # historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+        historical_source.data = dict(x=[], y=[])
         rollover=int(1e5)
         # print(channel_selected)
         
@@ -189,8 +190,6 @@ start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now(
 end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now())[:10])
 update_hist_data = Button(label="update plot")
 
-### seed initial history data:
-log_history_update("LL_pressure", start_date_widget.value, end_date_widget.value)
 
 ##callback to update history plot:
 def update_plot():
