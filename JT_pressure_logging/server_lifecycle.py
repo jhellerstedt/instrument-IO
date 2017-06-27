@@ -15,8 +15,9 @@ def on_server_loaded(server_context):
     t = Thread(target=read_pressures.update, args=())
     t.setDaemon(True)
     t.start()
+    print(threading.activeCount())
     
 def on_server_unloaded(server_context):
-    read_pressures.LL_gauge.TPG_close_serial('\dev\ttyUSB2')
+    # read_pressures.LL_gauge.TPG_close_serial('\dev\ttyUSB2')
     # read_pressures.prep_gauge.VACOM_close_serial('\dev\ttyUSB0')
     # read_pressures.micro_gauge.VACOM_close_serial('\dev\ttyUSB1')
