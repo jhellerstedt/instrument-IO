@@ -129,6 +129,4 @@ def update():
         except:
             print("something wrong with gauge read")
             continue
-        
-
-update()    
+            
