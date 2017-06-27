@@ -27,8 +27,12 @@ import pfeiffer_TPG261 as LL_gauge
 import vacom_MVC3
 
 ### initialize gauges:
-LL_gauge.TPG_open_serial('/dev/ttyUSB2')
-confirmation = LL_gauge.TPG_read_gauge1()
+def read_LL():
+    LL_gauge.TPG_open_serial('/dev/ttyUSB2')
+    LL_gauge.TPG_read_gauge1()
+    pressure = LL_gauge.TPG_read_pressure()
+    LL_gauge.TPG_close_serial('/dev/ttyUSB2')
+    return pressure
 
 def read_prep():
     vacom_MVC3.VACOM_open_serial('/dev/ttyUSB1')
@@ -99,7 +103,7 @@ def update():
         time.sleep(update_interval/1e3) ##convert ms to s
         try:
             ### replace with the function call to read the instrument you want
-            current_LL = LL_gauge.TPG_read_pressure()
+            current_LL = read_LL()
             current_prep = read_prep()
             current_micro = read_micro()
         

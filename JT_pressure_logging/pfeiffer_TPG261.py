@@ -43,12 +43,19 @@ def TPG_close_serial(serial_address):
 
 ##call this once to tell gauge to return gauge 1 value
 def TPG_read_gauge1():
-    ser.write(b'PR1\r') ## command to read gauge 1
-    ## should return  ACK (hex 06) CR LF
-    return ser.readline()
+    global ser
+    try:
+        ser.write(b'PR1\r') ## command to read gauge 1
+        ## should return  ACK (hex 06) CR LF
+        print(ser.readline())
+    except serial.SerialException as e:
+        print(e)
+        return
+    return
 
 
 def TPG_read_pressure():
+    global ser
     answer = '1'
     try:   
         ## ASCII for ENQ ENQUIRY, hexidecimal 05, pg. 65 pfeiffer manual
