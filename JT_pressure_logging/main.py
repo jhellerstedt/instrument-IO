@@ -137,7 +137,6 @@ def plot_update():
         micro_display.value = str(read_pressures.source.data['microscope_pressure'][-1])
     except:
         print("something wrong in main")
-        print(read_pressures.source)
         pass
         
 @gen.coroutine
