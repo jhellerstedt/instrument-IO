@@ -21,7 +21,6 @@ def on_server_loaded(server_context):
     # t.setDaemon(True)
     # t.start()
     t = multiprocessing.Process(target=read_pressures.update, args=())
-    jobs.append(t)
     t.start()
     return
     
