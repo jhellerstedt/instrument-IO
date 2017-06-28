@@ -225,7 +225,7 @@ prep_plots = column(prep_display, prep_p)
 micro_plots = column(micro_display, micro_p)
 
 # l = layout([LL_display, prep_display, micro_display], [LL_p, prep_p, micro_p], [hist_p, hist_widgets]) # sizing_mode='scale_width')
-l = layout([LL_plots, prep_plots, micro_plots], [hist_p, hist_widgets], sizing_mode='scale_width')
+l = layout([LL_plots, prep_plots, micro_plots], [hist_p, hist_widgets]) #, sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
 curdoc().add_root(l)
