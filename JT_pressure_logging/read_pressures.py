@@ -50,7 +50,8 @@ def read_micro():
 
 
 ## set the log filename as a string
-log_filename = "JT_pressure_logging/JT_pressure_log.txt"
+log_filename = "/home/jack/instrument-IO/JT_pressure_logging/JT_pressure_log.txt"
+# log_filename = os.getcwd() + "/" + log_filename
 print(log_filename)
 
 
