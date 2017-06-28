@@ -25,6 +25,7 @@ from bokeh.models import ColumnDataSource, DatetimeTickFormatter
 from bokeh.models.widgets import TextInput, Button, DatePicker, Dropdown
 from bokeh.layouts import column, row, layout, widgetbox
 
+import read_pressures
 
 from read_pressures import update_interval, current_LL, current_prep, current_micro, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
