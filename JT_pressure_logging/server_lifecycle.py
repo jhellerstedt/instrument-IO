@@ -20,7 +20,7 @@ def on_server_loaded(server_context):
     t = Thread(target=read_pressures.update, args=())
     t.setDaemon(True)
     t.start()
-    print(t.get_ident())
+    print(threading.get_ident())
     return
     
 def on_server_unloaded(server_context):
