@@ -16,6 +16,7 @@ from tornado import gen
 import read_pressures
 
 def on_server_loaded(server_context):
+    print("called on_server_loaded")
     # t = Thread(target=read_pressures.update, args=())
     # t.setDaemon(True)
     # t.start()
