@@ -82,6 +82,8 @@ try:
         source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], microscope_pressure=[micro_temp]),rollover=rollover_interval)
     f.close()
 except FileNotFoundError:
+    print("log file not found")
+    print(os.getcwd())
     pass    
     
 global t0, t0_two, first_run

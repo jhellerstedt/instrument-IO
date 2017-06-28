@@ -144,14 +144,8 @@ def log_history_update(channel_selected, start_date, end_date):
 
     try:
         f = open(log_filename)
-        # ts, pressure = str.split(f.readline(), '\t', 1)
-        # print(dt.strptime(ts, "%Y-%m-%d %H:%M:%S"))
-        # print(dt.strptime(end_date, "%Y-%m-%d"))
-        
-        # historical_source = ColumnDataSource(data=dict(x=[], y=[]))
+
         historical_source.data = dict(x=[], y=[])
-        rollover=int(1e5)
-        # print(channel_selected)
         
         for line in iter(f):
             ts, pressure = str.split(line, '\t', 1)
