@@ -104,7 +104,7 @@ def update():
     global t0, t0_two, rollover_interval, first_run, log_interval, current_LL, current_prep, current_micro
     
     while True:
-        print("sup reading gauges")
+        # print("sup reading gauges")
         time.sleep(update_interval/1e3) ##convert ms to s
         try:
             ### replace with the function call to read the instrument you want
