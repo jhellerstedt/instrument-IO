@@ -48,7 +48,10 @@ TOOLS="resize,pan,wheel_zoom,box_zoom,reset,box_select,save"
 
 ## LL pressure plot
 
-LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
+plot_width=400
+plot_height=400
+
+LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
 
 LL_p.y_range.range_padding=0
 
@@ -61,7 +64,7 @@ LL_r = LL_p.line(x='x', y='LL_pressure', source=plot_source)
 
 ## prep pressure plot
 
-prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
+prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
 
 prep_p.y_range.range_padding=0
 
@@ -74,7 +77,7 @@ prep_r = prep_p.line(x='x', y='prep_pressure', source=plot_source)
 
 ## microscope pressure plot
 
-micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=350, plot_height=350) # , lod_factor=16, lod_threshold=10
+micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
 
 micro_p.y_range.range_padding=0
 
@@ -87,7 +90,7 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 ### historical range plot:
 
-hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=700, plot_height=350) # , lod_factor=16, lod_threshold=10
+hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=2.5*plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
 
 hist_p.y_range.range_padding=0
 
@@ -183,7 +186,7 @@ micro_display = TextInput(title="microscope pressure", value=" ")
 
 ### widgets for historical data display:
 
-widget_width = 125
+widget_width = 150
 
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=widget_width)
