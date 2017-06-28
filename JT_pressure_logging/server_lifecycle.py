@@ -17,11 +17,10 @@ import read_pressures
 
 def on_server_loaded(server_context):
     print("called on_server_loaded")
-    # t = Thread(target=read_pressures.update, args=())
-    # t.setDaemon(True)
-    # t = multiprocessing.Process(target=read_pressures.update, args=())
-    # t.start()
-    read_pressures.update()
+    t = Thread(target=read_pressures.update, args=())
+    t.setDaemon(True)
+    t.start()
+    print(t.get_ident())
     return
     
 def on_server_unloaded(server_context):
