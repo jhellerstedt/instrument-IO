@@ -90,7 +90,7 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 ### historical range plot:
 
-hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=2.5*plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
+hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=int(2.5*plot_width), plot_height=plot_height) # , lod_factor=16, lod_threshold=10
 
 hist_p.y_range.range_padding=0
 
