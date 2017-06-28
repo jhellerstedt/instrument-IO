@@ -51,6 +51,7 @@ def read_micro():
 
 ## set the log filename as a string
 log_filename = "JT_pressure_logging/JT_pressure_log.txt"
+print(log_filename)
 
 
 ### if the update_interval callback is 2000 ms or less, too fast for reading the pressure gauge
