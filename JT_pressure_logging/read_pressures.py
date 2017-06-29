@@ -59,7 +59,7 @@ print(log_filename)
 update_interval = 5000 ## ms
 data_interval = 3 ## minutes; spacing between data points in total_axis "buffer"
 total_axis_hours = 24 ## total hours to keep in bokeh plot
-log_interval = 30 ## minutes interval to write data points to log file
+log_interval = 10 ## minutes interval to write data points to log file
 
 log_interval = log_interval * 60
 total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms
