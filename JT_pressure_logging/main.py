@@ -124,7 +124,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
         kk = 1e-4
     plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=read_rollover_interval)
     
-ii = 0
+
 @gen.coroutine
 def plot_update():
     try:
@@ -145,8 +145,7 @@ def plot_update():
             microscope_pressure=[current_micro]), 
             rollover=rollover_interval)
             
-        LL_p.title.text = "LL: " + str(current_LL) + "   " + str(ii)
-        ii = ii + 1
+        LL_p.title.text = "LL: " + str(current_LL)
         prep_p.title.text = "prep: " + str(current_prep)
         micro_p.title.text = "microscope: " + str(current_micro)
             
