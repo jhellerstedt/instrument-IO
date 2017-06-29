@@ -51,7 +51,10 @@ TOOLS="resize,pan,wheel_zoom,box_zoom,reset,box_select,save"
 plot_width=400
 plot_height=400
 
-LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
+LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
+LL_p.title.text = str(current_LL)
+LL_p.title.align = 'right'
+LL_p.title.text_font_size='24pt'
 
 LL_p.y_range.range_padding=0
 
@@ -64,7 +67,10 @@ LL_r = LL_p.line(x='x', y='LL_pressure', source=plot_source)
 
 ## prep pressure plot
 
-prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
+prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
+prep_p.title.text = str(current_prep)
+prep_p.title.align = 'right'
+prep_p.title.text_font_size='24pt'
 
 prep_p.y_range.range_padding=0
 
@@ -77,7 +83,10 @@ prep_r = prep_p.line(x='x', y='prep_pressure', source=plot_source)
 
 ## microscope pressure plot
 
-micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height) # , lod_factor=16, lod_threshold=10
+micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
+micro_p.title.text = str(current_micro)
+micro_p.title.align = 'right'
+micro_p.title.text_font_size='24pt'
 
 micro_p.y_range.range_padding=0
 
@@ -90,7 +99,7 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
 ### historical range plot:
 
-hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=int(2.5*plot_width), plot_height=plot_height) # , lod_factor=16, lod_threshold=10
+hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=int(2.5*plot_width), plot_height=plot_height)
 
 hist_p.y_range.range_padding=0
 
@@ -178,11 +187,9 @@ def log_history_update(channel_selected, start_date, end_date):
         pass
 
 
-text_font_size = '18pt'
-
-LL_display = TextInput(title="LL pressure", value=" ", text_font_size=text_font_size)
-prep_display = TextInput(title="prep pressure", value=" ", text_font_size=text_font_size)
-micro_display = TextInput(title="microscope pressure", value=" ", text_font_size=text_font_size)
+LL_display = TextInput(title="LL pressure", value=" ")
+prep_display = TextInput(title="prep pressure", value=" ")
+micro_display = TextInput(title="microscope pressure", value=" ")
 
 ### widgets for historical data display:
 
