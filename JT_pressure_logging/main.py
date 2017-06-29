@@ -145,7 +145,7 @@ def plot_update():
             microscope_pressure=[current_micro]), 
             rollover=rollover_interval)
             
-        LL_p.title.text = "LL: " + str(current_LL) + ii
+        LL_p.title.text = "LL: " + str(current_LL) + "   " + str(ii)
         ii = ii + 1
         prep_p.title.text = "prep: " + str(current_prep)
         micro_p.title.text = "microscope: " + str(current_micro)
