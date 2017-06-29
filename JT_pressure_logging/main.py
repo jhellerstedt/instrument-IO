@@ -52,7 +52,7 @@ plot_width=400
 plot_height=400
 
 LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
-LL_p.title.text = str(current_LL)
+LL_p.title.text = "LL: " + str(current_LL)
 LL_p.title.align = 'right'
 LL_p.title.text_font_size='24pt'
 
@@ -68,7 +68,7 @@ LL_r = LL_p.line(x='x', y='LL_pressure', source=plot_source)
 ## prep pressure plot
 
 prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
-prep_p.title.text = str(current_prep)
+prep_p.title.text = "prep: " + str(current_prep)
 prep_p.title.align = 'right'
 prep_p.title.text_font_size='24pt'
 
@@ -84,7 +84,7 @@ prep_r = prep_p.line(x='x', y='prep_pressure', source=plot_source)
 ## microscope pressure plot
 
 micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
-micro_p.title.text = str(current_micro)
+micro_p.title.text = "microscope: " + str(current_micro)
 micro_p.title.align = 'right'
 micro_p.title.text_font_size='24pt'
 
@@ -144,6 +144,10 @@ def plot_update():
             prep_pressure=[current_prep],
             microscope_pressure=[current_micro]), 
             rollover=rollover_interval)
+            
+        LL_p.title.text = "LL: " + str(current_LL)
+        prep_p.title.text = "prep: " + str(current_prep)
+        micro_p.title.text = "microscope: " + str(current_micro)
             
         LL_display.value = str(read_pressures.source.data['LL_pressure'][-1])
         prep_display.value = str(read_pressures.source.data['prep_pressure'][-1])
