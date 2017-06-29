@@ -21,7 +21,7 @@ from datetime import timedelta
 from bokeh.client import push_session
 from bokeh.io import curdoc
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, DatetimeTickFormatter
+from bokeh.models import ColumnDataSource, DatetimeTickFormatter, WheelZoomTool
 from bokeh.models.widgets import TextInput, Button, DatePicker, Dropdown, PreText
 from bokeh.layouts import column, row, layout, widgetbox
 
@@ -52,7 +52,7 @@ plot_width=400
 plot_height=400
 
 LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
-LL_p.toolbar.active_scroll = wheel_zoom
+LL_p.toolbar.active_scroll = WheelZoomTool()
 
 LL_p.y_range.range_padding=0
 
@@ -66,7 +66,7 @@ LL_r = LL_p.line(x='x', y='LL_pressure', source=plot_source)
 ## prep pressure plot
 
 prep_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
-prep_p.toolbar.active_scroll = wheel_zoom
+# prep_p.toolbar.active_scroll = wheel_zoom
 
 prep_p.y_range.range_padding=0
 
@@ -80,7 +80,7 @@ prep_r = prep_p.line(x='x', y='prep_pressure', source=plot_source)
 ## microscope pressure plot
 
 micro_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
-micro_p.toolbar.active_scroll = wheel_zoom
+# micro_p.toolbar.active_scroll = wheel_zoom
 
 micro_p.y_range.range_padding=0
 
@@ -94,7 +94,7 @@ micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 ### historical range plot:
 
 hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=int(2.5*plot_width), plot_height=plot_height)
-hist_p.toolbar.active_scroll = wheel_zoom
+# hist_p.toolbar.active_scroll = wheel_zoom
 
 hist_p.y_range.range_padding=0
 
