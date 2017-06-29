@@ -178,15 +178,16 @@ def log_history_update(channel_selected, start_date, end_date):
         pass
 
 
-    
+text_font_size = '18pt'
 
-LL_display = TextInput(title="LL pressure", value=" ")
-prep_display = TextInput(title="prep pressure", value=" ")
-micro_display = TextInput(title="microscope pressure", value=" ")
+LL_display = TextInput(title="LL pressure", value=" ", text_font_size=text_font_size)
+prep_display = TextInput(title="prep pressure", value=" ", text_font_size=text_font_size)
+micro_display = TextInput(title="microscope pressure", value=" ", text_font_size=text_font_size)
 
 ### widgets for historical data display:
 
 widget_width = 150
+
 
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=widget_width)
