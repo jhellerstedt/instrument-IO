@@ -45,6 +45,7 @@ historical_source = ColumnDataSource(data=dict(x=[], y=[]))
 
 
 TOOLS="resize,pan,wheel_zoom,box_zoom,reset,box_select,save"
+wheel_zoom = WheelZoomTool()
 
 ## LL pressure plot
 
@@ -52,7 +53,7 @@ plot_width=400
 plot_height=400
 
 LL_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=plot_width, plot_height=plot_height)
-LL_p.toolbar.active_scroll = WheelZoomTool()
+LL_p.toolbar.active_scroll = wheel_zoom
 
 LL_p.y_range.range_padding=0
 
