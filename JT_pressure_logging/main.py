@@ -134,14 +134,14 @@ def plot_update():
         else:
             LL_display.value = str(LL_temp)
         # prep_temp = read_pressures.source.data['prep_pressure'][-1]
-        prep_temp = current_prep[:]
+        prep_temp[:] = current_prep[:]
         if prep_temp == 0. or math.isnan(prep_temp):
             prep_temp = 1e-4
             prep_display.value = "gauge problem"
         else:
             prep_display.value = str(prep_temp)
         # micro_temp = read_pressures.source.data['microscope_pressure'][-1]
-        micro_temp = current_micro[:]
+        micro_temp[:] = current_micro[:]
         if micro_temp == 0. or math.isnan(micro_temp):
             micro_temp = 1e-4
             micro_display.value = "gauge problem"
