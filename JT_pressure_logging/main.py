@@ -126,19 +126,22 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 def plot_update():
     try:
         temp_time = (dt.timestamp(dt.now())+3600)*1e3
-        LL_temp = read_pressures.source.data['LL_pressure'][-1]
+        # LL_temp = read_pressures.source.data['LL_pressure'][-1]
+        LL_temp[:] = current_LL[:]
         if LL_temp == 0. or math.isnan(LL_temp):
             LL_temp = 1e-4
             LL_display.value = "gauge problem"
         else:
             LL_display.value = str(LL_temp)
-        prep_temp = read_pressures.source.data['prep_pressure'][-1]
+        # prep_temp = read_pressures.source.data['prep_pressure'][-1]
+        prep_temp = current_prep[:]
         if prep_temp == 0. or math.isnan(prep_temp):
             prep_temp = 1e-4
             prep_display.value = "gauge problem"
         else:
             prep_display.value = str(prep_temp)
-        micro_temp = read_pressures.source.data['microscope_pressure'][-1]
+        # micro_temp = read_pressures.source.data['microscope_pressure'][-1]
+        micro_temp = current_micro[:]
         if micro_temp == 0. or math.isnan(micro_temp):
             micro_temp = 1e-4
             micro_display.value = "gauge problem"
