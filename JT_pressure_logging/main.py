@@ -113,11 +113,11 @@ hist_r = hist_p.line(x='x', y='y', source=historical_source)
 for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source.data['LL_pressure'], 
                             read_pressures.source.data['prep_pressure'], 
                             read_pressures.source.data['microscope_pressure']):
-    if ii <= 0. or ii == float('nan'):
+    if ii <= 0. or math.isnan(ii):
         ii = 1e-4
-    if jj <= 0. or jj == float('nan'):
+    if jj <= 0. or math.isnan(jj):
         ii = 1e-4
-    if kk <= 0. or kk == float('nan'):
+    if kk <= 0. or math.isnan(kk):
         kk = 1e-4
     plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=read_rollover_interval)
     
@@ -149,9 +149,9 @@ def plot_update():
             micro_display.value = str(micro_temp)
         
         plot_source.stream(dict(x=[temp_time],
-            LL_pressure=[current_LL],
-            prep_pressure=[current_prep],
-            microscope_pressure=[current_micro]), 
+            LL_pressure=[LL_temp],
+            prep_pressure=[prep_temp],
+            microscope_pressure=[micro_temp]), 
             rollover=rollover_interval)
 
             
@@ -173,13 +173,13 @@ def log_history_update(channel_selected, start_date, end_date):
             prep_temp, micro_temp = str.split(pressure, '\t', 1)
             ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
             LL_temp = float(LL_temp)
-            if LL_temp == 0. or LL_temp == float('nan'):
+            if LL_temp == 0. or math.isnan(LL_temp):
                 LL_temp = 1e-4
             prep_temp = float(prep_temp)
-            if prep_temp == 0. or prep_temp == float('nan'):
+            if prep_temp == 0. or math.isnan(prep_temp):
                 prep_temp = 1e-4
             micro_temp = float(micro_temp)
-            if micro_temp == 0. or micro_temp == float('nan'):
+            if micro_temp == 0. or math.isnan(micro_temp):
                 micro_temp = 1e-4
             if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
                 if channel_selected == "LL_pressure" and LL_temp != 0.:
