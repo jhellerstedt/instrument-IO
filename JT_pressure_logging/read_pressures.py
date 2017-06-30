@@ -10,7 +10,7 @@ import os
 import time
 import serial
 import numpy as np
-#import pandas as pd
+import math
 
 from datetime import datetime as dt
 
@@ -79,13 +79,18 @@ try:
         prep_temp, micro_temp = str.split(pressure, '\t', 1)
         ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
         LL_temp = float(LL_temp)
+        if math.isnan(LL_temp):
+            LL_temp = 10.
         prep_temp = float(prep_temp)
+        if math.isnan(prep_temp):
+            prep_temp = 10.
         micro_temp = float(micro_temp)
+        if math.isnan(micro_temp):
+            micro_temp = 10.
         source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], microscope_pressure=[micro_temp]),rollover=rollover_interval)
     f.close()
-except FileNotFoundError:
-    print("log file not found")
-    print(os.getcwd())
+except:
+    print("log file read issues")
     pass    
     
 global t0, t0_two, first_run
