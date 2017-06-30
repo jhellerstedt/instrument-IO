@@ -142,9 +142,9 @@ def plot_update():
             rollover=rollover_interval)
 
             
-        LL_display.value = str(read_pressures.source.data['LL_pressure'][-1])
-        prep_display.value = str(read_pressures.source.data['prep_pressure'][-1])
-        micro_display.value = str(read_pressures.source.data['microscope_pressure'][-1])
+        LL_display.value = str(LL_temp)
+        prep_display.value = str(prep_temp)
+        micro_display.value = str(micro_temp)
     except:
         print("something wrong in main")
         pass
