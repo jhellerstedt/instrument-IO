@@ -138,21 +138,30 @@ def plot_update():
         # LL_temp = read_pressures.source.data['LL_pressure'][-1]
         LL_temp = read_pressures.current_LL
         if LL_temp == 0. or math.isnan(LL_temp):
-            LL_temp = plot_source.data['LL_pressure'][-1]
+            try:
+                LL_temp = plot_source.data['LL_pressure'][-1]
+            except:
+                LL_temp = 10
             LL_display.value = "gauge problem"
         else:
             LL_display.value = str(LL_temp)
         # prep_temp = read_pressures.source.data['prep_pressure'][-1]
         prep_temp = read_pressures.current_prep
         if prep_temp == 0. or math.isnan(prep_temp):
-            prep_temp = plot_source.data['prep_pressure'][-1]
+            try:
+                prep_temp = plot_source.data['prep_pressure'][-1]
+            except:
+                prep_temp = 10
             prep_display.value = "gauge problem"
         else:
             prep_display.value = str(prep_temp)
         # micro_temp = read_pressures.source.data['microscope_pressure'][-1]
         micro_temp = read_pressures.current_micro
         if micro_temp == 0. or math.isnan(micro_temp):
-            micro_temp = plot_source.data['microscope_pressure'][-1]
+            try:
+                micro_temp = plot_source.data['microscope_pressure'][-1]
+            exept:
+                micro_temp = 10
             micro_display.value = "gauge problem"
         else:
             micro_display.value = str(micro_temp)
@@ -183,13 +192,22 @@ def log_history_update(channel_selected, start_date, end_date):
             ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
             LL_temp = float(LL_temp)
             if LL_temp == 0. or math.isnan(LL_temp):
-                LL_temp = historical_source.data['y'][-1]
+                try:
+                    LL_temp = historical_source.data['y'][-1]
+                except:
+                    LL_temp = 10
             prep_temp = float(prep_temp)
             if prep_temp == 0. or math.isnan(prep_temp):
-                prep_temp = historical_source.data['y'][-1]
+                try:
+                    prep_temp = historical_source.data['y'][-1]
+                except:
+                    prep_temp = 10
             micro_temp = float(micro_temp)
             if micro_temp == 0. or math.isnan(micro_temp):
-                micro_temp = historical_source.data['y'][-1]
+                try:
+                    micro_temp = historical_source.data['y'][-1]
+                except:
+                    micro_temp = 10
             if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
                 if channel_selected == "LL_pressure" and LL_temp != 0.:
                     historical_source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[LL_temp]))
