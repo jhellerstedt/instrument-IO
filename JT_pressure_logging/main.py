@@ -160,7 +160,7 @@ def plot_update():
         if micro_temp == 0. or math.isnan(micro_temp):
             try:
                 micro_temp = plot_source.data['microscope_pressure'][-1]
-            exept:
+            except:
                 micro_temp = 10
             micro_display.value = "gauge problem"
         else:
