@@ -96,7 +96,7 @@ run_measurement = False
 @gen.coroutine
 def initialize():
     global run_measurement
-    if run_measurement == False
+    if run_measurement == False:
         ##open the connection
         omega.HH806AU_open_connection(instrument_address.value)
         run_measurement = True
