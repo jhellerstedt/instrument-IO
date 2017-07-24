@@ -90,9 +90,11 @@ temp1_old, temp2_old = omega.HH806AU_read_temp()
 global timer_zero
 timer_zero = time.time()
 
-
-global run_measurement
-run_measurement = False
+try:
+    run_measurement
+except NameError:
+    global run_measurement
+    run_measurement = False
 @gen.coroutine
 def initialize():
     global run_measurement
