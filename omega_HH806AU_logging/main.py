@@ -33,7 +33,7 @@ log_filename = "/home/jack/omega_temperature_log.txt"
 ### if the update_interval callback is 2000 ms or less, too fast for reading the pressure gauge
 update_interval = 700 ## ms
 total_axis_hours = 24 ## total hours to keep in bokeh plot
-log_interval = 30 ## minutes interval to write data points to log file
+log_interval = 5 ## minutes interval to write data points to log file
 
 
 log_interval = log_interval * 60
