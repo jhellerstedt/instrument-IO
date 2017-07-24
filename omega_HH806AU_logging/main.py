@@ -100,10 +100,10 @@ def initialize():
         ##open the connection
         omega.HH806AU_open_connection(instrument_address.value)
         run_measurement = True
-        reset_button.label = 'stop communication'
+        start_update.label = 'stop communication'
     else:
         run_measurement = False
-        reset_button.label = 'start communication'
+        start_update.label = 'start communication'
     
 
 @gen.coroutine
