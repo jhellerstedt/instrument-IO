@@ -26,15 +26,8 @@ from bokeh.layouts import column, row
 from tornado import gen
 
 
-### set serial address
-serial_address = '/dev/cu.usbserial-AL00R9JJ'
-
-##open the connection
-omega.HH806AU_open_connection(serial_address)
-
-
 ## set the log filename as a string
-log_filename = "example.txt"
+log_filename = "/home/jack/omega_temperature_log.txt"
 
 
 ### if the update_interval callback is 2000 ms or less, too fast for reading the pressure gauge
@@ -98,39 +91,60 @@ global timer_zero
 timer_zero = time.time()
 
 
+global run_measurement
+run_measurement = False
+@gen.coroutine
+def initialize():
+    global run_measurement
+    if run_measurement == False
+        ##open the connection
+        omega.HH806AU_open_connection(instrument_address.value)
+        run_measurement = True
+        reset_button.label = 'stop communication'
+    else:
+        run_measurement = False
+        reset_button.label = 'start communication'
+    
+
 @gen.coroutine
 def update():
     global t0, rollover_interval, first_run, log_interval, temp1_old, temp2_old, timer_zero
-    global temp1, temp2
+    global temp1, temp2, run_measurement
     
-    ### replace with the function call to read the instrument you want
-    temp1, temp2 = omega.HH806AU_read_temp()
+    if run_measurement == True:
+        ### replace with the function call to read the instrument you want
+        temp1, temp2 = omega.HH806AU_read_temp()
         
-    instrument_display1.value = str(temp1)
-    instrument_display2.value = str(temp2)
+        instrument_display1.value = str(temp1)
+        instrument_display2.value = str(temp2)
         
-    ts = dt.now()
+        ts = dt.now()
     
-    ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
-    if np.abs(temp1 - temp1_old) < 50:
-        source1.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp1]),rollover=rollover_interval)
-        temp1_old = temp1
-    if np.abs(temp2 - temp2_old) < 50:
-        source2.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp2]),rollover=rollover_interval)
-        temp2_old = temp2    
+        ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
+        if np.abs(temp1 - temp1_old) < 50:
+            source1.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp1]),rollover=rollover_interval)
+            temp1_old = temp1
+        if np.abs(temp2 - temp2_old) < 50:
+            source2.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp2]),rollover=rollover_interval)
+            temp2_old = temp2    
   
-    t1 = time.time()
-    # timer_display.value = "{:.2}".format((t1-timer_zero)/60)
-    timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
+        t1 = time.time()
+        # timer_display.value = "{:.2}".format((t1-timer_zero)/60)
+        timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
     
-    if t1 - t0 > log_interval or first_run == True:  ## take a log point every thirty minutes    
-        first_run = False
-        ts = str(ts)
-        ts = ts[:19]
-        log = open(log_filename, 'a')
-        log.write(ts + "\t" + str(temp1) + "\t" + str(temp2) + "\n")
-        log.close()
-        t0 = t1
+        if t1 - t0 > log_interval or first_run == True:  ## take a log point every thirty minutes    
+            first_run = False
+            ts = str(ts)
+            ts = ts[:19]
+            log = open(log_filename, 'a')
+            log.write(ts + "\t" + str(temp1) + "\t" + str(temp2) + "\n")
+            log.close()
+            t0 = t1
+    else:
+        try:
+            omega.HH806AU_close_connection()
+        except:
+            pass
         
   
 
@@ -147,8 +161,13 @@ def reset_timer():
     
 reset_button.on_click(reset_timer)
 
+instrument_address = TextInput(title='address', value='/dev/ttyUSB3')
 
-data_values = column(instrument_display1, instrument_display2, timer_display, reset_button)
+start_update = Button(label="start communication", button_type="default")
+start_update.on_click(initialize)
+
+
+data_values = column(instrument_address, start_update, instrument_display1, instrument_display2, timer_display, reset_button)
 
 layout = row(p,data_values)
 
