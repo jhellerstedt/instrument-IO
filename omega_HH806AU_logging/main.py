@@ -36,6 +36,9 @@ total_axis_hours = np.multiply(total_axis_hours,3.6e6)
 global rollover_interval
 rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
+global timer_zero
+timer_zero = time.time()
+
 TOOLS="resize,crosshair,pan,wheel_zoom,box_zoom,reset,box_select,save"
 
 p = figure(tools=TOOLS, x_axis_type="datetime") # , lod_factor=16, lod_threshold=10 , y_axis_type="log"
@@ -97,7 +100,7 @@ reset_button.on_click(reset_timer)
 instrument_address = TextInput(title='address', value='/dev/ttyUSB3')
 
 start_update = Button(label="start communication", button_type="default")
-start_update.on_click(initialize())
+start_update.on_click(initialize)
 
 
 data_values = column(instrument_address, start_update, instrument_display1, instrument_display2, timer_display, reset_button)
