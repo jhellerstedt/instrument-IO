@@ -25,6 +25,8 @@ from bokeh.layouts import column, row
 
 from tornado import gen
 
+from server_lifecycle import run_measurement
+
 
 ## set the log filename as a string
 log_filename = "/home/jack/omega_temperature_log.txt"
