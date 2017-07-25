@@ -107,5 +107,5 @@ layout = row(p,data_values)
 
 curdoc().add_root(layout)
 curdoc().title = "omega temperature logging"
-curdoc().add_periodic_callback(update, update_interval)
+curdoc().add_periodic_callback(plot_update, update_interval)
     
