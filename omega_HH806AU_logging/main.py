@@ -57,6 +57,11 @@ plot_source2 = ColumnDataSource(data=dict(x=[], y=[]))
 
 r1 = p.line(x='x', y='y', source=plot_source1, legend="T1 temp", color="red")
 r2 = p.line(x='x', y='y', source=plot_source2, legend="T2 temp", color="blue")
+
+for ii, jj in zip(read_temps.source1.data['x'], read_temps.source1.data['y']):
+    plot_source1.stream(dict(x=[ii], y=[jj]),rollover=rollover_interval)
+for ii, jj in zip(read_temps.source2.data['x'], read_temps.source2.data['y']):    
+    plot_source2.stream(dict(x=[ii], y=[jj]),rollover=rollover_interval)
    
 
 @gen.coroutine
