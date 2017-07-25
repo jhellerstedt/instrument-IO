@@ -104,7 +104,12 @@ reset_button.on_click(reset_timer)
 
 instrument_address = TextInput(title='address', value='/dev/ttyUSB3')
 
-start_update = Button(label="start communication", button_type="default")
+if read_temps.run_measurement == False:
+    label = 'start communication'
+else:
+    label = 'stop communication'
+
+start_update = Button(label=label, button_type="default")
 start_update.on_click(initialize)
 
 
