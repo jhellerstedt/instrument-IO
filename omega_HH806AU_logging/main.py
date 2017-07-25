@@ -71,6 +71,11 @@ def plot_update():
     instrument_display1.value = str(read_temps.temp1)
     instrument_display2.value = str(read_temps.temp2)
     
+    if read_temps.run_measurement == False:
+        start_update.label = 'start communication'
+    else:
+        start_update.label = 'stop communication'
+    
     ts = dt.now()
 
     ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
