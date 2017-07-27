@@ -79,8 +79,8 @@ def plot_update():
     ts = dt.now()
 
     ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
-    plot_source1.stream(dict(x=[read_temps.source1.data['x'][-1]], y=[read_temps.source1.data['y'][-1]]),rollover=rollover_interval)
-    plot_source2.stream(dict(x=[read_temps.source2.data['x'][-1]], y=[read_temps.source2.data['y'][-1]]),rollover=rollover_interval) 
+    plot_source1.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[read_temps.temp1]),rollover=rollover_interval)
+    plot_source2.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[read_temps.temp2]),rollover=rollover_interval) 
 
     t1 = time.time()
     timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))

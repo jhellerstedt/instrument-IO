@@ -91,6 +91,7 @@ def initialize(address):
 def update():
     global t0, rollover_interval, first_run, log_interval, temp1_old, temp2_old, timer_zero
     global temp1, temp2, run_measurement
+    t2 = time.time()
     while True:
         time.sleep(update_interval / 1e3)
         if run_measurement == True:
@@ -100,12 +101,12 @@ def update():
             ts = dt.now()
 
             ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
-            # if np.abs(temp1 - temp1_old) < 50:
-            source1.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp1]),rollover=rollover_interval)
-                # temp1_old = temp1
-            # if np.abs(temp2 - temp2_old) < 50:
-            source2.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp2]),rollover=rollover_interval)
-                # temp2_old = temp2
+
+            ## only save point in stream every 2min
+            if time.time() - t2 > 120:         
+                source1.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp1]),rollover=rollover_interval)
+                source2.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], y=[temp2]),rollover=rollover_interval)
+                t2 = time.time()
 
             t1 = time.time()
 
