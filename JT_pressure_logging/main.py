@@ -14,6 +14,7 @@ import math
 
 from tornado import gen
 
+import datetime
 from datetime import datetime as dt
 from datetime import timedelta
 
@@ -173,13 +174,14 @@ def plot_update():
             microscope_pressure=[micro_temp]), 
             rollover=rollover_interval)
             
-        t1 = time.time()
-        timer_display.value = str(dt.timedelta(seconds=int(round(t1-timer_zero))))
+
 
             
     except:
         print("something wrong in main")
         pass
+    t1 = time.time()
+    timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
         
 @gen.coroutine
 def log_history_update(channel_selected, start_date, end_date):
