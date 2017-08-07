@@ -171,6 +171,9 @@ def plot_update():
             prep_pressure=[prep_temp],
             microscope_pressure=[micro_temp]), 
             rollover=rollover_interval)
+            
+        t1 = time.time()
+        timer_display.value = str(dt.timedelta(seconds=int(round(t1-timer_zero))))
 
             
     except:
@@ -241,6 +244,9 @@ start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now(
 end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now()+timedelta(days=1))[:10], width=widget_width)
 update_hist_data = Button(label="update plot", width=widget_width)
 
+timer_display = TextInput(title="timer", value=" ")
+reset_button = Button(label="reset", button_type="default")
+
 
 ##callback to update history plot:
 def update_plot():
@@ -255,10 +261,19 @@ def change_title(attr):
     return
 channel_selection.on_click(change_title)
 
+@gen.coroutine
+def reset_timer():
+    global timer_zero
+    timer_zero = time.time()
+
 ### seed initial values:
 channel_selection.value = "LL_pressure" ## seed initial value
 change_title("title")
 update_plot()
+global timer_zero
+timer_zero = time.time()
+
+reset_button.on_click(reset_timer)
 
 # hist_layout = column(hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data))
 
@@ -269,7 +284,7 @@ prep_plots = column(prep_display, prep_p)
 micro_plots = column(micro_display, micro_p)
 
 # l = layout([LL_display, prep_display, micro_display], [LL_p, prep_p, micro_p], [hist_p, hist_widgets]) # sizing_mode='scale_width')
-l = layout([LL_plots, prep_plots, micro_plots], [hist_p, hist_widgets]) #, sizing_mode='scale_width')
+l = layout([LL_plots, prep_plots, micro_plots, column(timer_display, reset_button)], [hist_p, hist_widgets]) #, sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
 curdoc().add_root(l)
