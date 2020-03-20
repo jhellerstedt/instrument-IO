@@ -11,6 +11,7 @@ import time
 import serial
 import numpy as np
 import math
+import pickle
 
 from datetime import datetime as dt
 
@@ -118,6 +119,14 @@ def update():
         
             ts = dt.now()
             t1 = time.time()
+            
+            ## write current pressure to disk
+            pressure_dict = {
+                'LL_pressure' = current_LL
+                'prep_pressure' = current_prep
+                'micro_pressure' = current_micro
+            }
+            pickle.dump(pressure_dict, open("/home/jack/instrument-IO/G80_pressure_logging/current_pressure.p", 'wb'))
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
                 ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
