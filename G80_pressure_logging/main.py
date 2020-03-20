@@ -292,7 +292,7 @@ l = layout([LL_plots, prep_plots, micro_plots, column(timer_display, reset_butto
 # l2 = column(l, hist_layout)
 curdoc().add_root(l)
 
-curdoc().title = "JT pressure status"
+curdoc().title = "G80 pressure status"
 curdoc().add_periodic_callback(plot_update, update_interval)
 
 
