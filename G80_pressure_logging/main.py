@@ -46,7 +46,7 @@ historical_source = ColumnDataSource(data=dict(x=[], y=[]))
 
 
 
-TOOLS="resize,pan,wheel_zoom,box_zoom,reset,box_select,save"
+TOOLS="pan,wheel_zoom,box_zoom,reset,box_select,save"
 wheel_zoom = WheelZoomTool()
 
 ## LL pressure plot
