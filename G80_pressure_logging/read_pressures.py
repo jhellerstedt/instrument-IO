@@ -121,11 +121,10 @@ def update():
             t1 = time.time()
             
             ## write current pressure to disk
-            pressure_dict = {
-                'LL_pressure' = current_LL
-                'prep_pressure' = current_prep
-                'micro_pressure' = current_micro
-            }
+            pressure_dict = {}
+            pressure_dict['LL_pressure'] = current_LL
+            pressure_dict['prep_pressure'] = current_prep
+            pressure_dict['micro_pressure'] = current_micro
             pickle.dump(pressure_dict, open("/home/jack/instrument-IO/G80_pressure_logging/current_pressure.p", 'wb'))
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
