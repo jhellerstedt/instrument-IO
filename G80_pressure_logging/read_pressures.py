@@ -134,6 +134,15 @@ def update():
                 log.write(ts + "\t" + str(current_LL) + "\t" + str(current_prep) + "\t" + str(current_micro) + "\n")
                 log.close()
                 t0 = t1
+                ## limit log file length to ~1 month = 1500 lines @ 30min intervals
+                with open(log_filename, 'r') as f:
+                    content = f.readlines()
+                if len(content) > 1500: ## number of lines of log to keep
+                    with open(log_filename, 'w') as f:
+                        f.writelines(content[1:])
+            
+            
+                
         except:
             print("something wrong with gauge read")
             continue
