@@ -14,6 +14,7 @@ import math
 import pickle
 
 from datetime import datetime as dt
+import pytz
 
 #import matplotlib.pyplot as plt
 
@@ -117,7 +118,7 @@ def update():
             current_prep = read_prep()
             current_micro = read_micro()
         
-            ts = dt.now()
+            ts = dt.now(pytz.timezone('Australia/Melbourne'))
             t1 = time.time()
             
             ## write current pressure to disk
@@ -128,8 +129,8 @@ def update():
             pickle.dump(pressure_dict, open("/home/jack/instrument-IO/G80_pressure_logging/current_pressure.p", 'wb'))
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
-                ## the 1e3 and 3600 are some weird bokeh correction, maybe a ms/ns problem, and timezone?
-                source.stream(dict(x=[(dt.timestamp(ts)+3600)*1e3], LL_pressure=[current_LL], prep_pressure=[current_prep], 
+                ## the 1e3 is some weird bokeh correction, maybe a ms/ns problem
+                source.stream(dict(x=[(dt.timestamp(ts))*1e3], LL_pressure=[current_LL], prep_pressure=[current_prep], 
                                         microscope_pressure=[current_micro]),rollover=rollover_interval)
                 t0_two = t1
   

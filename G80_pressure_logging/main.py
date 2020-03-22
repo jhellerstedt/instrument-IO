@@ -17,6 +17,7 @@ from tornado import gen
 import datetime
 from datetime import datetime as dt
 from datetime import timedelta
+import pytz
 
 #import matplotlib.pyplot as plt
 
@@ -136,8 +137,9 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 def plot_update():
     global timer_zero
     try:
-        temp_time = (dt.timestamp(dt.now())+3600)*1e3
-        # LL_temp = read_pressures.source.data['LL_pressure'][-1]
+#        temp_time = (dt.timestamp(dt.now())+3600)*1e3
+        temp_time = (dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne'))))*1e3
+        
         LL_temp = read_pressures.current_LL
         if LL_temp == 0. or math.isnan(LL_temp):
             try:
