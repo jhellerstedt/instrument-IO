@@ -115,7 +115,6 @@ def update():
             current_micro = read_micro()
             
             ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
-            ts = ts[:19]
             t1 = time.time()
             
             ## write current pressure to disk
@@ -136,6 +135,7 @@ def update():
             if t1 - t0 > log_interval or first_run == True:  ## take a log point every log_interval minutes    
                 first_run = False
                 ts = str(ts)
+                ts = ts[:19]
                 log = open(log_filename, 'a')
                 log.write(ts + "\t" + str(current_LL) + "\t" + str(current_prep) + "\t" + str(current_micro) + "\n")
                 log.close()
