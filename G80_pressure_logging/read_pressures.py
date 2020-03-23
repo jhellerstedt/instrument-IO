@@ -43,7 +43,7 @@ def read_micro():
 
 import os   
 
-os.environ['TZ'] = 'UTC+10' ## Melbourne
+os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
 time.tzset()
 
 
