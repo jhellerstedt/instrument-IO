@@ -62,7 +62,7 @@ LL_p.toolbar.active_scroll = wheel_zoom
 LL_p.y_range.range_padding=0
 
 LL_p.xaxis.axis_label = "time"
-LL_p.xaxis.formatter=DatetimeTickFormatter()
+LL_p.xaxis.formatter=DatetimeTickFormatter('%Z'='Australia/Melbourne')
 
 LL_p.yaxis.axis_label = "LL pressure (mbar)"
 
@@ -171,7 +171,7 @@ def plot_update():
         else:
             micro_display.value = str(micro_temp)
         
-        plot_source.stream(dict(x=[temp_time*1e3 + 1e7],
+        plot_source.stream(dict(x=[temp_time*1e3],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
             microscope_pressure=[micro_temp]), 
