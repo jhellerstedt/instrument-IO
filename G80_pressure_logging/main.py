@@ -16,6 +16,7 @@ from tornado import gen
 import datetime
 from datetime import datetime as dt
 from datetime import timedelta
+import pytz
 
 from bokeh.io import curdoc
 from bokeh.plotting import figure
@@ -27,8 +28,6 @@ import read_pressures
 
 from read_pressures import update_interval, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
-
-## set timezone for bokeh
 
 
 total_axis_hours = 24
@@ -132,7 +131,7 @@ def plot_update():
     
     os.environ['TZ'] = 'Australia/Melbourne' ## Melbourne is UTC+10
     time.tzset()
-    temp_time = dt.timestamp(dt.now())
+    temp_time = dt.timestamp(dt.now(tz=pytz.timezone('Australia/Melbourne')))
     
     try:
         
