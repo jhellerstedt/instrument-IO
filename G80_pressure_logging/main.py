@@ -137,7 +137,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 @gen.coroutine
 def plot_update():
     global timer_zero
-    temp_time = (dt.timestamp(dt.now(tz=pytz.timezone('Australia/Melbourne'))))*1e3
+    temp_time = (dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne'))))*1e3
     
     try:
         
