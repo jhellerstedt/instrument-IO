@@ -113,7 +113,11 @@ def update():
             current_LL = read_LL()
             current_prep = read_prep()
             current_micro = read_micro()
-        
+            
+            
+            os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
+            time.tzset()
+            
             ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
             t1 = time.time()
             
