@@ -42,7 +42,7 @@ def read_micro():
 ## bokeh timezone stuff:
 
 import os   
-os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
+os.environ['TZ'] = 'Australia/Melbourne' ## Melbourne is UTC+10
 time.tzset()
 
 
@@ -114,7 +114,7 @@ def update():
             current_prep = read_prep()
             current_micro = read_micro()
             
-            ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
+            ts = dt.now() # tz=pytz.timezone('Australia/Melbourne')
             t1 = time.time()
             
             ## write current pressure to disk
