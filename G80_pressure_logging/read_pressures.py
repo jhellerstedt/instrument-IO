@@ -6,6 +6,7 @@ Created on Mon Dec 19 17:29:28 2016
 @author: jack
 """
 
+import os  
 import time
 import numpy as np
 import math
@@ -39,11 +40,6 @@ def read_micro():
     return pressure
     
 
-## bokeh timezone stuff:
-
-import os   
-os.environ['TZ'] = 'UTC+0' #'Australia/Melbourne' ## Melbourne is UTC+10
-time.tzset()
 
 
 ## set the log filename as a string
@@ -69,6 +65,8 @@ source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], micr
 
 #### populate plot with old data if possible:
 try:
+    os.environ['TZ'] = 'UTC+0' #'Australia/Melbourne' ## Melbourne is UTC+10
+    time.tzset()
     f = open(log_filename)
     for line in iter(f):
         ts, pressure = str.split(line, '\t', 1)

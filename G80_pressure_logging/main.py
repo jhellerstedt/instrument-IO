@@ -6,7 +6,7 @@ Created on Mon Dec 19 17:29:28 2016
 @author: jack
 """
 
-
+import os
 import time
 import numpy as np
 import math
@@ -29,9 +29,6 @@ from read_pressures import update_interval, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
 
 ## set timezone for bokeh
-import os
-os.environ['TZ'] = 'Australia/Melbourne' ## Melbourne is UTC+10
-time.tzset()
 
 
 total_axis_hours = 24
@@ -132,6 +129,9 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 @gen.coroutine
 def plot_update():
     global timer_zero
+    
+    os.environ['TZ'] = 'Australia/Melbourne' ## Melbourne is UTC+10
+    time.tzset()
     temp_time = dt.timestamp(dt.now())
     
     try:
@@ -184,6 +184,8 @@ def plot_update():
 def log_history_update(channel_selected, start_date, end_date):
 
     try:
+        os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
+        time.tzset()
         f = open(log_filename)
 
         historical_source.data = dict(x=[], y=[])
