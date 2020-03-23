@@ -137,8 +137,9 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 @gen.coroutine
 def plot_update():
     global timer_zero
+    temp_time = (dt.timestamp(tz=dt.now(pytz.timezone('Australia/Melbourne'))))*1e3
+    
     try:
-        temp_time = (dt.timestamp(tz=dt.now(pytz.timezone('Australia/Melbourne'))))*1e3
         
         LL_temp = read_pressures.current_LL
         if LL_temp == 0. or math.isnan(LL_temp):
