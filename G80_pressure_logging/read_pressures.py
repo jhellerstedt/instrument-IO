@@ -79,7 +79,8 @@ try:
         micro_temp = float(micro_temp)
         if math.isnan(micro_temp):
             micro_temp = 10.
-        source.stream(dict(x=[(dt.timestamp(ts))*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], microscope_pressure=[micro_temp]),rollover=rollover_interval)
+#        source.stream(dict(x=[(dt.timestamp(ts))*1e3], LL_pressure=[LL_temp], prep_pressure=[prep_temp], microscope_pressure=[micro_temp]),rollover=rollover_interval)
+        source.stream(dict(x=[(dt.timestamp(ts))], LL_pressure=[LL_temp], prep_pressure=[prep_temp], microscope_pressure=[micro_temp]),rollover=rollover_interval)
     f.close()
 except:
     print("log file read issues")
