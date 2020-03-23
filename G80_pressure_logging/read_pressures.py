@@ -126,7 +126,8 @@ def update():
             pressure_dict['LL_pressure'] = current_LL
             pressure_dict['prep_pressure'] = current_prep
             pressure_dict['micro_pressure'] = current_micro
-            pickle.dump(pressure_dict, open("/home/jack/instrument-IO/G80_pressure_logging/current_pressure.p", 'wb'))
+            with open("/home/jack/instrument-IO/G80_pressure_logging/current_pressure.p", 'wb') as f:
+                pickle.dump(pressure_dict, f)
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
                 ## the 1e3 is some weird bokeh correction, maybe a ms/ns problem
@@ -149,9 +150,7 @@ def update():
                 if len(content) > 1500: ## number of lines of log to keep
                     with open(log_filename, 'w') as f:
                         f.writelines(content[1:])
-            
-            
-                
+                       
         except:
             print("something wrong with gauge read")
             continue

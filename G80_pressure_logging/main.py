@@ -245,8 +245,8 @@ channel_selection = Dropdown(label="select channel", button_type="success", menu
 
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
-start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10], width=widget_width)
-end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now()+timedelta(days=1))[:10], width=widget_width)
+start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now(pytz.timezone('Australia/Melbourne'))-timedelta(days=1))[:10], width=widget_width)
+end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now(pytz.timezone('Australia/Melbourne'))+timedelta(days=1))[:10], width=widget_width)
 update_hist_data = Button(label="update plot", width=widget_width)
 
 timer_display = TextInput(title="timer", value=" ")
