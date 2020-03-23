@@ -129,12 +129,11 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 def plot_update():
     global timer_zero
     
-    os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
+    os.environ['TZ'] = 'Australia/Melbourne' ## Melbourne is UTC+10
     time.tzset()
     temp_time = dt.timestamp(dt.now(tz=pytz.timezone('Australia/Melbourne')))
     
     try:
-        
         LL_temp = read_pressures.current_LL
         if LL_temp == 0. or math.isnan(LL_temp):
             try:
@@ -144,7 +143,6 @@ def plot_update():
             LL_display.value = "gauge problem"
         else:
             LL_display.value = str(LL_temp)
-        # prep_temp = read_pressures.source.data['prep_pressure'][-1]
         prep_temp = read_pressures.current_prep
         if prep_temp == 0. or math.isnan(prep_temp):
             try:
@@ -154,7 +152,6 @@ def plot_update():
             prep_display.value = "gauge problem"
         else:
             prep_display.value = str(prep_temp)
-        # micro_temp = read_pressures.source.data['microscope_pressure'][-1]
         micro_temp = read_pressures.current_micro
         if micro_temp == 0. or math.isnan(micro_temp):
             try:
@@ -165,7 +162,7 @@ def plot_update():
         else:
             micro_display.value = str(micro_temp)
         
-        plot_source.stream(dict(x=[temp_time*1e3],
+        plot_source.stream(dict(x=[time.time()*1e3],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
             microscope_pressure=[micro_temp]), 
