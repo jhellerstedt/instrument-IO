@@ -31,7 +31,7 @@ from read_pressures import rollover_interval as read_rollover_interval
 
 ## set timezone for bokeh
 import os
-os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
+os.environ['TZ'] = 'Australia/Melbourne' ## Melbourne is UTC+10
 time.tzset()
 
 
@@ -137,7 +137,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 @gen.coroutine
 def plot_update():
     global timer_zero
-    temp_time = dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne')))
+    temp_time = dt.timestamp(dt.now())
     
     try:
         
