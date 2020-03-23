@@ -6,9 +6,8 @@ Created on Mon Dec 19 17:29:28 2016
 @author: jack
 """
 
-import os
+
 import time
-import serial
 import numpy as np
 import math
 
@@ -19,18 +18,15 @@ from datetime import datetime as dt
 from datetime import timedelta
 import pytz
 
-#import matplotlib.pyplot as plt
-
-from bokeh.client import push_session
 from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter, WheelZoomTool
-from bokeh.models.widgets import TextInput, Button, DatePicker, Dropdown, PreText
-from bokeh.layouts import column, row, layout, widgetbox
+from bokeh.models.widgets import TextInput, Button, Dropdown, PreText
+from bokeh.layouts import column, layout, widgetbox
 
 import read_pressures
 
-from read_pressures import update_interval, current_LL, current_prep, current_micro, log_filename
+from read_pressures import update_interval, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
 
 
