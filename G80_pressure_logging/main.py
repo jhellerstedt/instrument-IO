@@ -131,7 +131,9 @@ def plot_update():
     
     os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
     time.tzset()
-    temp_time = dt.timestamp(dt.now(tz=pytz.timezone('Australia/Melbourne')))
+    ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
+    ts = str(ts)
+    ts = ts[:19]
     
     try:
         LL_temp = read_pressures.current_LL
@@ -162,7 +164,7 @@ def plot_update():
         else:
             micro_display.value = str(micro_temp)
         
-        plot_source.stream(dict(x=[temp_time*1e3],
+        plot_source.stream(dict(x=[(dt.timestamp(dt.strptime(ts, "%Y-%m-%d %H:%M:%S")))*1e3],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
             microscope_pressure=[micro_temp]), 
@@ -174,7 +176,7 @@ def plot_update():
     t1 = time.time()
     timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
     
-    datetime_display.value = dt.fromtimestamp(temp_time).strftime('%c')
+    datetime_display.value = dt.fromtimestamp(dt.timestamp(dt.strptime(ts, "%Y-%m-%d %H:%M:%S"))).strftime('%c')
         
 @gen.coroutine
 def log_history_update(channel_selected, start_date, end_date):

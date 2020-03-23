@@ -115,6 +115,9 @@ def update():
             current_micro = read_micro()
             
             ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
+            ts = str(ts)
+            ts = ts[:19]
+            
             t1 = time.time()
             
             ## write current pressure to disk
@@ -127,15 +130,13 @@ def update():
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
                 ## the 1e3 is some weird bokeh correction, maybe a ms/ns problem
-                source.stream(dict(x=[(dt.timestamp(ts))*1e3], LL_pressure=[current_LL], prep_pressure=[current_prep], 
+                source.stream(dict(x=[(dt.timestamp(dt.strptime(ts, "%Y-%m-%d %H:%M:%S")))*1e3], LL_pressure=[current_LL], prep_pressure=[current_prep], 
                                         microscope_pressure=[current_micro]),rollover=rollover_interval)
                 t0_two = t1
   
             
             if t1 - t0 > log_interval or first_run == True:  ## take a log point every log_interval minutes    
                 first_run = False
-                ts = str(ts)
-                ts = ts[:19]
                 log = open(log_filename, 'a')
                 log.write(ts + "\t" + str(current_LL) + "\t" + str(current_prep) + "\t" + str(current_micro) + "\n")
                 log.close()
