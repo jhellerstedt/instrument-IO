@@ -6,9 +6,7 @@ Created on Mon Dec 19 17:29:28 2016
 @author: jack
 """
 
-import os
 import time
-import serial
 import numpy as np
 import math
 import pickle
@@ -16,14 +14,7 @@ import pickle
 from datetime import datetime as dt
 import pytz
 
-#import matplotlib.pyplot as plt
-
-
-from bokeh.io import curdoc
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, DatetimeTickFormatter
-from bokeh.models.widgets import TextInput
-from bokeh.layouts import column, row
+from bokeh.models import ColumnDataSource
 
 import vacom_MVC3 as LL_gauge
 import GP350 as ion_gauge
