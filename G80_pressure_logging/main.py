@@ -29,6 +29,11 @@ import read_pressures
 from read_pressures import update_interval, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
 
+## set timezone for bokeh
+import os
+os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
+time.tzset()
+
 
 total_axis_hours = 24
 total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms

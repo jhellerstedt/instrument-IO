@@ -114,10 +114,6 @@ def update():
             current_prep = read_prep()
             current_micro = read_micro()
             
-            
-            os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
-            time.tzset()
-            
             ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
             t1 = time.time()
             
@@ -136,7 +132,7 @@ def update():
                 t0_two = t1
   
             
-            if t1 - t0 > log_interval or first_run == True:  ## take a log point every thirty minutes    
+            if t1 - t0 > log_interval or first_run == True:  ## take a log point every log_interval minutes    
                 first_run = False
                 ts = str(ts)
                 ts = ts[:19]
