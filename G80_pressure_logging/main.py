@@ -138,7 +138,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 def plot_update():
     global timer_zero
     try:
-        temp_time = (dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne'))))*1e3
+        temp_time = (dt.timestamp(dt.now()))*1e3 # dt.now(pytz.timezone('Australia/Melbourne'))
         
         LL_temp = read_pressures.current_LL
         if LL_temp == 0. or math.isnan(LL_temp):
@@ -184,6 +184,8 @@ def plot_update():
         pass
     t1 = time.time()
     timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
+    
+    datetime_display.value = dt.fromtimestamp(temp_time*1e-3).strftime('%c')
         
 @gen.coroutine
 def log_history_update(channel_selected, start_date, end_date):
@@ -252,6 +254,9 @@ update_hist_data = Button(label="update plot", width=widget_width)
 timer_display = TextInput(title="timer", value=" ")
 reset_button = Button(label="reset", button_type="default")
 
+## add diagnostic date time
+datetime_display = TextInput(title="timestamp", value=" ")
+
 
 ##callback to update history plot:
 def update_plot():
@@ -289,7 +294,7 @@ prep_plots = column(prep_display, prep_p)
 micro_plots = column(micro_display, micro_p)
 
 # l = layout([LL_display, prep_display, micro_display], [LL_p, prep_p, micro_p], [hist_p, hist_widgets]) # sizing_mode='scale_width')
-l = layout([LL_plots, prep_plots, micro_plots, column(timer_display, reset_button)], [hist_p, hist_widgets]) #, sizing_mode='scale_width')
+l = layout([LL_plots, prep_plots, micro_plots, column(timer_display, reset_button, datetime_display)], [hist_p, hist_widgets]) #, sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
 curdoc().add_root(l)
