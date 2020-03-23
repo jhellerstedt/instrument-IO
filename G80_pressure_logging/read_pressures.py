@@ -105,6 +105,8 @@ def update():
     
     while True:
         # print("sup reading gauges")
+        os.environ['TZ'] = 'UTC+0' #'Australia/Melbourne' ## Melbourne is UTC+10
+        time.tzset()
         time.sleep(update_interval/1e3) ##convert ms to s
         try:
             ### replace with the function call to read the instrument you want

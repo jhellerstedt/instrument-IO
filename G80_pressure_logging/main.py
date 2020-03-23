@@ -129,7 +129,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 def plot_update():
     global timer_zero
     
-    os.environ['TZ'] = 'Australia/Melbourne' ## Melbourne is UTC+10
+    os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
     time.tzset()
     temp_time = dt.timestamp(dt.now(tz=pytz.timezone('Australia/Melbourne')))
     
@@ -162,7 +162,7 @@ def plot_update():
         else:
             micro_display.value = str(micro_temp)
         
-        plot_source.stream(dict(x=[time.time()*1e3],
+        plot_source.stream(dict(x=[temp_time*1e3],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
             microscope_pressure=[micro_temp]), 
