@@ -41,9 +41,9 @@ def read_micro():
 
 ## bokeh timezone stuff:
 
-#import os   
-#os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
-#time.tzset()
+import os   
+os.environ['TZ'] = 'UTC+10' ## Melbourne is UTC+10
+time.tzset()
 
 
 ## set the log filename as a string
@@ -114,7 +114,7 @@ def update():
             current_prep = read_prep()
             current_micro = read_micro()
         
-            ts = dt.now(pytz.timezone('Australia/Melbourne'))
+            ts = dt.now() # pytz.timezone('Australia/Melbourne')
             t1 = time.time()
             
             ## write current pressure to disk
