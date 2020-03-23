@@ -42,9 +42,9 @@ def read_micro():
 
 ## bokeh timezone stuff:
 
-import os   
-os.environ['TZ'] = 'UTC+10' ## Melbourne is UTC+10
-time.tzset()
+#import os   
+#os.environ['TZ'] = 'UTC+10' ## Melbourne is UTC+10
+#time.tzset()
 
 
 ## set the log filename as a string
