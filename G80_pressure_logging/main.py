@@ -171,7 +171,7 @@ def plot_update():
         else:
             micro_display.value = str(micro_temp)
         
-        plot_source.stream(dict(x=[temp_time*1e3],
+        plot_source.stream(dict(x=[temp_time*1e3 + 1e7],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
             microscope_pressure=[micro_temp]), 
