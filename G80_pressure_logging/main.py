@@ -137,7 +137,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 @gen.coroutine
 def plot_update():
     global timer_zero
-    temp_time = (dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne'))))*1e3
+    temp_time = dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne')))
     
     try:
         
@@ -171,7 +171,7 @@ def plot_update():
         else:
             micro_display.value = str(micro_temp)
         
-        plot_source.stream(dict(x=[temp_time],
+        plot_source.stream(dict(x=[temp_time*1e3],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
             microscope_pressure=[micro_temp]), 
@@ -183,7 +183,7 @@ def plot_update():
     t1 = time.time()
     timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
     
-    datetime_display.value = dt.fromtimestamp(temp_time*1e-3).strftime('%c')
+    datetime_display.value = dt.fromtimestamp(temp_time).strftime('%c')
         
 @gen.coroutine
 def log_history_update(channel_selected, start_date, end_date):
