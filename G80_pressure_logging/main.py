@@ -62,7 +62,7 @@ LL_p.toolbar.active_scroll = wheel_zoom
 LL_p.y_range.range_padding=0
 
 LL_p.xaxis.axis_label = "time"
-LL_p.xaxis.formatter=DatetimeTickFormatter('%Z'='Australia/Melbourne')
+LL_p.xaxis.formatter=DatetimeTickFormatter()
 
 LL_p.yaxis.axis_label = "LL pressure (mbar)"
 
