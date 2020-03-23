@@ -138,7 +138,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
 def plot_update():
     global timer_zero
     try:
-        temp_time = (dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne'))))*1e3 # 
+        temp_time = (dt.timestamp(dt.now(pytz.timezone('Australia/Melbourne'))))*1e3
         
         LL_temp = read_pressures.current_LL
         if LL_temp == 0. or math.isnan(LL_temp):
@@ -185,7 +185,7 @@ def plot_update():
     t1 = time.time()
     timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
     
-    datetime_display.value = dt.fromtimestamp(temp_time*1e-3).strftime('%c')
+    datetime_display.value = dt.fromtimestamp(temp_time).strftime('%c')
         
 @gen.coroutine
 def log_history_update(channel_selected, start_date, end_date):
