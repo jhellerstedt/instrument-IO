@@ -12,7 +12,6 @@ import math
 import pickle
 
 from datetime import datetime as dt
-from datetime import timezone
 import pytz
 
 from bokeh.models import ColumnDataSource
@@ -128,7 +127,7 @@ def update():
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
                 ## the 1e3 is some weird bokeh correction, maybe a ms/ns problem
-                source.stream(dict(x=[(dt.replace(tzinfo=timezone.utc).timestamp(ts))*1e3], LL_pressure=[current_LL], prep_pressure=[current_prep], 
+                source.stream(dict(x=[(dt.timestamp(ts))*1e3], LL_pressure=[current_LL], prep_pressure=[current_prep], 
                                         microscope_pressure=[current_micro]),rollover=rollover_interval)
                 t0_two = t1
   
