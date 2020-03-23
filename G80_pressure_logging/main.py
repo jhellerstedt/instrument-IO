@@ -16,7 +16,6 @@ from tornado import gen
 import datetime
 from datetime import datetime as dt
 from datetime import timedelta
-import pytz
 
 from bokeh.io import curdoc
 from bokeh.plotting import figure
@@ -39,13 +38,9 @@ total_axis_hours = 24
 total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms
 rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
-
 plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
 
-# historical_source = ColumnDataSource(data=dict(x=[(dt.timestamp(dt.now())+3600)*1e3], y=[1]))
 historical_source = ColumnDataSource(data=dict(x=[], y=[]))
-
-
 
 
 TOOLS="pan,wheel_zoom,box_zoom,reset,box_select,save"
@@ -245,8 +240,8 @@ channel_selection = Dropdown(label="select channel", button_type="success", menu
 
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
-start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now(pytz.timezone('Australia/Melbourne'))-timedelta(days=1))[:10], width=widget_width)
-end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now(pytz.timezone('Australia/Melbourne'))+timedelta(days=1))[:10], width=widget_width)
+start_date_widget = TextInput(title="start date (YYYY-MM-DD)", value=str(dt.now()-timedelta(days=1))[:10], width=widget_width)
+end_date_widget = TextInput(title="end date (YYYY-MM-DD)", value=str(dt.now()+timedelta(days=1))[:10], width=widget_width)
 update_hist_data = Button(label="update plot", width=widget_width)
 
 timer_display = TextInput(title="timer", value=" ")
