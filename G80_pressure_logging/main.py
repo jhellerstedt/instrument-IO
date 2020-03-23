@@ -31,7 +31,7 @@ from read_pressures import rollover_interval as read_rollover_interval
 
 ## set timezone for bokeh
 import os
-os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
+os.environ['TZ'] = 'UTC+10' ## Melbourne is UTC+10
 time.tzset()
 
 
