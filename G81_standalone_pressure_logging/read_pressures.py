@@ -22,28 +22,44 @@ import GP350 as ion_gauge
 
 ### initialize gauges:
 def read_LL():
-    LL_gauge.VACOM_open_serial('/dev/ttyUSB1')  
+    LL_gauge.VACOM_open_serial('/dev/ttyUSB0')  
     pressure = LL_gauge.VACOM_read_pressure()
-    LL_gauge.VACOM_close_serial('/dev/ttyUSB1')
+    LL_gauge.VACOM_close_serial('/dev/ttyUSB0')
     return pressure
 
+
+## no serial cables to read GP350 gauges; hack it by having it hit LL 3x times
 def read_prep():
-    ion_gauge.GP350_open_serial('/dev/ttyUSB0')
-    pressure = ion_gauge.GP350_read_pressure()
-    ion_gauge.GP350_close_serial('/dev/ttyUSB0')
+    LL_gauge.VACOM_open_serial('/dev/ttyUSB0')  
+    pressure = LL_gauge.VACOM_read_pressure()
+    LL_gauge.VACOM_close_serial('/dev/ttyUSB0')
     return pressure
 
 def read_micro():
-    ion_gauge.GP350_open_serial('/dev/ttyUSB2')
-    pressure = ion_gauge.GP350_read_pressure()
-    ion_gauge.GP350_close_serial('/dev/ttyUSB2')
+    LL_gauge.VACOM_open_serial('/dev/ttyUSB0')  
+    pressure = LL_gauge.VACOM_read_pressure()
+    LL_gauge.VACOM_close_serial('/dev/ttyUSB0')
     return pressure
+    
+
+### correct GP350 reads, serial addresses need updating
+#def read_prep():
+#    ion_gauge.GP350_open_serial('/dev/ttyUSB0')
+#    pressure = ion_gauge.GP350_read_pressure()
+#    ion_gauge.GP350_close_serial('/dev/ttyUSB0')
+#    return pressure
+#
+#def read_micro():
+#    ion_gauge.GP350_open_serial('/dev/ttyUSB2')
+#    pressure = ion_gauge.GP350_read_pressure()
+#    ion_gauge.GP350_close_serial('/dev/ttyUSB2')
+#    return pressure
     
 
 
 
 ## set the log filename as a string
-log_filename = "/home/jack/instrument-IO/G80_pressure_logging/G80_pressure_log.txt"
+log_filename = "/home/jack/instrument-IO/G81_standalone_pressure_logging/standalone_pressure_log.txt"
 # log_filename = os.getcwd() + "/" + log_filename
 print(log_filename)
 
@@ -125,7 +141,7 @@ def update():
             pressure_dict['LL_pressure'] = current_LL
             pressure_dict['prep_pressure'] = current_prep
             pressure_dict['micro_pressure'] = current_micro
-            with open("/home/jack/instrument-IO/G80_pressure_logging/current_pressure.p", 'wb') as f:
+            with open("/home/jack/instrument-IO/G81_standalone_pressure_logging/current_pressure.p", 'wb') as f:
                 pickle.dump(pressure_dict, f)
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:
