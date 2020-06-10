@@ -21,41 +21,32 @@ import vacom_MVC3 as LL_gauge
 import GP350 as ion_gauge
 
 ### initialize gauges:
-def read_LL():
-    LL_gauge.VACOM_open_serial('/dev/ttyUSB0')  
-    pressure = LL_gauge.VACOM_read_pressure()
-    LL_gauge.VACOM_close_serial('/dev/ttyUSB0')
-    return pressure
 
+## VACOM gauge is not working right now with serial read
+#def read_LL():
+#    LL_gauge.VACOM_open_serial('/dev/ttyUSB0')  
+#    pressure = LL_gauge.VACOM_read_pressure()
+#    LL_gauge.VACOM_close_serial('/dev/ttyUSB0')
+#    return pressure    
 
-## no serial cables to read GP350 gauges; hack it by having it hit LL 3x times
+## turn them all into the prep chamber GP350 controller
 def read_prep():
-    LL_gauge.VACOM_open_serial('/dev/ttyUSB0')  
-    pressure = LL_gauge.VACOM_read_pressure()
-    LL_gauge.VACOM_close_serial('/dev/ttyUSB0')
+    ion_gauge.GP350_open_serial('/dev/ttyUSB0')
+    pressure = ion_gauge.GP350_read_pressure()
+    ion_gauge.GP350_close_serial('/dev/ttyUSB0')
     return pressure
 
 def read_micro():
-    LL_gauge.VACOM_open_serial('/dev/ttyUSB0')  
-    pressure = LL_gauge.VACOM_read_pressure()
-    LL_gauge.VACOM_close_serial('/dev/ttyUSB0')
+    ion_gauge.GP350_open_serial('/dev/ttyUSB0')
+    pressure = ion_gauge.GP350_read_pressure()
+    ion_gauge.GP350_close_serial('/dev/ttyUSB0')
     return pressure
     
-
-### correct GP350 reads, serial addresses need updating
-#def read_prep():
-#    ion_gauge.GP350_open_serial('/dev/ttyUSB0')
-#    pressure = ion_gauge.GP350_read_pressure()
-#    ion_gauge.GP350_close_serial('/dev/ttyUSB0')
-#    return pressure
-#
-#def read_micro():
-#    ion_gauge.GP350_open_serial('/dev/ttyUSB2')
-#    pressure = ion_gauge.GP350_read_pressure()
-#    ion_gauge.GP350_close_serial('/dev/ttyUSB2')
-#    return pressure
-    
-
+def read_LL():
+    ion_gauge.GP350_open_serial('/dev/ttyUSB0')
+    pressure = ion_gauge.GP350_read_pressure()
+    ion_gauge.GP350_close_serial('/dev/ttyUSB0')
+    return pressure
 
 
 ## set the log filename as a string
