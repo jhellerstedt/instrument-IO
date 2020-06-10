@@ -24,10 +24,7 @@ import GP350 as ion_gauge
 
 ## VACOM gauge is not working right now with serial read
 def read_LL():
-    LL_gauge.VACOM_open_serial('/dev/ttyUSB2')  
-    pressure = LL_gauge.VACOM_read_pressure()
-    LL_gauge.VACOM_close_serial('/dev/ttyUSB2')
-    return pressure    
+    return LL_gauge.read_pressure('/dev/ttyUSB2')    
 
 ## turn them all into the prep chamber GP350 controller
 def read_prep():
