@@ -28,16 +28,11 @@ def read_LL():
     return pressure
 
 def read_prep():
-    ion_gauge.GP350_open_serial('/dev/ttyUSB0')
-    pressure = ion_gauge.GP350_read_pressure()
-    ion_gauge.GP350_close_serial('/dev/ttyUSB0')
-    return pressure
+    return ion_gauge.read_pressure('/dev/ttyUSB0')
+
 
 def read_micro():
-    ion_gauge.GP350_open_serial('/dev/ttyUSB2')
-    pressure = ion_gauge.GP350_read_pressure()
-    ion_gauge.GP350_close_serial('/dev/ttyUSB2')
-    return pressure
+    return ion_gauge.read_pressure('/dev/ttyUSB2')
     
 
 
