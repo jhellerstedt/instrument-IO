@@ -22,10 +22,7 @@ import GP350 as ion_gauge
 
 ### initialize gauges:
 def read_LL():
-    LL_gauge.VACOM_open_serial('/dev/ttyUSB1')  
-    pressure = LL_gauge.VACOM_read_pressure()
-    LL_gauge.VACOM_close_serial('/dev/ttyUSB1')
-    return pressure
+    return LL_gauge.read_pressure('/dev/ttyUSB1')
 
 def read_prep():
     return ion_gauge.read_pressure('/dev/ttyUSB0')
