@@ -22,14 +22,14 @@ import GP350 as ion_gauge
 
 ### initialize gauges:
 def read_LL():
-    return LL_gauge.read_pressure('/dev/ttyUSB1')
+    return LL_gauge.read_pressure('/dev/ttyUSB2')
 
 def read_prep():
     return ion_gauge.read_pressure('/dev/ttyUSB0')
 
 
 def read_micro():
-    return ion_gauge.read_pressure('/dev/ttyUSB2')
+    return ion_gauge.read_pressure('/dev/ttyUSB1')
     
 
 
