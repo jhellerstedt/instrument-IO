@@ -95,8 +95,8 @@ def update():
                     'databaseURL': 'https://g80live-default-rtdb.firebaseio.com/'
                 })
             
-            current_T_stm  = db.reference('stmTemp').get()
-            current_T_cryo = db.reference('cryoTemp').get()
+            current_T_stm  = float(db.reference('stmTemp').get())
+            current_T_cryo = float(db.reference('cryoTemp').get())
             
             ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
             ts = str(ts)
