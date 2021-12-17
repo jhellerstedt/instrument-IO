@@ -25,6 +25,7 @@ from bokeh.models.widgets import TextInput, Button, Dropdown, PreText
 from bokeh.layouts import column, layout, widgetbox
 
 import read_pressures
+import read_temperatures
 
 from read_pressures import update_interval, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
@@ -34,7 +35,7 @@ total_axis_hours = 24
 total_axis_hours = np.multiply(total_axis_hours,3.6e6) ## hours to ms
 rollover_interval = int(np.floor(np.divide(total_axis_hours, update_interval)))
 
-plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[]))
+plot_source = ColumnDataSource(data=dict(x=[], LL_pressure=[], prep_pressure=[], microscope_pressure=[], T_stm=[], T_cryo=[]))
 
 historical_source = ColumnDataSource(data=dict(x=[], y=[]))
 
@@ -87,6 +88,18 @@ micro_p.yaxis.axis_label = "microscope pressure (mbar)"
 
 micro_r = micro_p.line(x='x', y='microscope_pressure', source=plot_source)
 
+
+## microscope temperatures plot
+
+temperature_plot = figure(tools=TOOLS, y_axis_type='linear', x_axis_type='datetime', plot_width=plot_width, plot_height=plot_height)
+temperature_plot.xaxis.axis_label = 'time'
+temperature_plot.xaxis.formatter=DatetimeTickFormatter()
+
+temperature_plot.yaxis.axis_label = 'temperature (K)'
+temperature_plot_r = temperature_plot.multi_line(xs=[plot_source['x'], plot_source['x']], ys=[plot_source['T_stm'], plot_source['T_cryo']], linecolor=['red', 'blue'])
+
+
+
 ### historical range plot:
 
 hist_p = figure(tools=TOOLS, y_axis_type="log", x_axis_type="datetime", plot_width=int(2.5*plot_width), plot_height=plot_height)
@@ -104,9 +117,11 @@ hist_r = hist_p.line(x='x', y='y', source=historical_source)
 
 ## remove zero's for plotting:
     
-for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source.data['LL_pressure'], 
+for aa, ii, jj, kk, ttstm, ttcryo in zip(read_pressures.source.data['x'], read_pressures.source.data['LL_pressure'], 
                             read_pressures.source.data['prep_pressure'], 
-                            read_pressures.source.data['microscope_pressure']):
+                            read_pressures.source.data['microscope_pressure'],
+                            read_temperatures.source.data['T_stm'],
+                            read_temperatures.source.data['T_cryo']):
     if ii <= 0. or math.isnan(ii):
         try:
             ii = plot_source.data['LL_pressure'][-1]
@@ -122,7 +137,7 @@ for aa, ii, jj, kk in zip(read_pressures.source.data['x'], read_pressures.source
             kk = plot_source.data['microscope_pressure'][-1]
         except:
             kk = 10
-    plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk]), rollover=read_rollover_interval)
+    plot_source.stream(dict(x=[aa], LL_pressure=[ii], prep_pressure=[jj], microscope_pressure=[kk], T_stm=[ttstm], T_cryo=[ttcryo]), rollover=read_rollover_interval)
     
 
 @gen.coroutine
@@ -163,11 +178,25 @@ def plot_update():
             micro_display.value = "gauge problem"
         else:
             micro_display.value = str(micro_temp)
+       
+            
+        T_stm_temp = read_temperatures.current_T_stm
+        T_cryo_temp = read_temperatures.current_T_cryo
+        try:
+            T_stm_display.value = plot_source.data['T_stm'][-1]
+        except:
+            T_stm_display.value = 'T_stm problem'
+        try:
+            T_cryo_display.value = plot_source.data['T_cryo'][-1]
+        except:
+            T_cryo_display.value = plot_source.data['T_cryo'][-1]
         
         plot_source.stream(dict(x=[(dt.timestamp(dt.strptime(ts, "%Y-%m-%d %H:%M:%S")))*1e3],
             LL_pressure=[LL_temp],
             prep_pressure=[prep_temp],
-            microscope_pressure=[micro_temp]), 
+            microscope_pressure=[micro_temp]),
+            T_stm=[T_stm_temp],
+            T_cryo=[T_cryo_temp],
             rollover=rollover_interval)
             
     except:
@@ -228,6 +257,9 @@ LL_display = TextInput(title="LL pressure", value=" ")
 prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
+T_cryo_display = TextInput(title='T_cryo', value=" ")
+T_stm_display = TextInput(title='T_stm', value=' ')
+
 LL_d = PreText
 
 ### widgets for historical data display:
@@ -285,9 +317,10 @@ hist_widgets = widgetbox(channel_selection, start_date_widget, end_date_widget, 
 LL_plots = column(LL_display, LL_p)
 prep_plots = column(prep_display, prep_p)
 micro_plots = column(micro_display, micro_p)
+temperature_plots = column(T_stm_display, T_cryo_display, temperature_plot)
 
 # l = layout([LL_display, prep_display, micro_display], [LL_p, prep_p, micro_p], [hist_p, hist_widgets]) # sizing_mode='scale_width')
-l = layout([LL_plots, prep_plots, micro_plots, column(timer_display, reset_button, datetime_display)], [hist_p, hist_widgets]) #, sizing_mode='scale_width')
+l = layout([LL_plots, prep_plots, micro_plots, temperature_plots, column(timer_display, reset_button, datetime_display)], [hist_p, hist_widgets]) #, sizing_mode='scale_width')
             
 # l2 = column(l, hist_layout)
 curdoc().add_root(l)
