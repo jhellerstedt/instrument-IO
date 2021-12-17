@@ -80,7 +80,7 @@ current_T_cryo = 0
 
 
 def update():
-    global t0, t0_two, rollover_interval, first_run, log_interval, current_LL, current_prep, current_micro
+    global t0, t0_two, rollover_interval, first_run, log_interval, current_T_stm, current_T_cryo
     
     while True:
         # print("sup reading gauges")
