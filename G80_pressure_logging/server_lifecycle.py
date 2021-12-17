@@ -6,21 +6,27 @@ Created on Mon Dec 19 17:29:28 2016
 @author: jack
 """
 
-import threading
+# import threading
 from threading import Thread
 
-import multiprocessing
+# import multiprocessing
 
-from tornado import gen
+# from tornado import gen
 
 import read_pressures
+import read_temperatures
 
 def on_server_loaded(server_context):
     print("called on_server_loaded")
     t = Thread(target=read_pressures.update, args=())
     t.setDaemon(True)
     t.start()
-    # print(threading.get_ident())
+    
+    ## start the temperature process
+    t2 = Thread(target=read_temperatures.update, args=())
+    t2.setDaemon(True)
+    t2.start()
+    
     return
     
 def on_server_unloaded(server_context):
