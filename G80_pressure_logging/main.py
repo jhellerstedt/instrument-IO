@@ -20,8 +20,8 @@ import pytz
 
 from bokeh.io import curdoc
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, DatetimeTickFormatter, WheelZoomTool
-from bokeh.models.widgets import TextInput, Button, Dropdown, PreText
+from bokeh.models import ColumnDataSource, DatetimeTickFormatter, WheelZoomTool, Column
+from bokeh.models.widgets import TextInput, Button, PreText, Dropdown
 from bokeh.layouts import column, layout, widgetbox
 
 import read_pressures
@@ -96,7 +96,9 @@ temperature_plot.xaxis.axis_label = 'time'
 temperature_plot.xaxis.formatter=DatetimeTickFormatter()
 
 temperature_plot.yaxis.axis_label = 'temperature (K)'
-temperature_plot_r = temperature_plot.multi_line(xs=[plot_source['x'], plot_source['x']], ys=[plot_source['T_stm'], plot_source['T_cryo']], linecolor=['red', 'blue'])
+temperature_plot_dict = {}
+for temp, color in zip(['T_stm', 'T_cryo'], ['red', 'blue']):
+    temperature_plot_dict[temp] = temperature_plot.line(x='x', y=temp, color=color, source=plot_source)
 
 
 
@@ -269,6 +271,8 @@ widget_width = 150
 
 menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
 channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=widget_width)
+global channel_selected 
+channel_selected = 'LL_pressure' # dropdown value variable
 
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
@@ -285,14 +289,17 @@ datetime_display = TextInput(title="timestamp", value=" ")
 
 ##callback to update history plot:
 def update_plot():
-    log_history_update(channel_selection.value, start_date_widget.value, end_date_widget.value)
+    log_history_update(channel_selected, start_date_widget.value, end_date_widget.value)
     return
 update_hist_data.on_click(update_plot)
 
 
 
-def change_title(attr):
-    channel_selection.label = channel_selection.value
+def change_title(event):
+    # print(str(event))
+    # global channel_selected
+    # channel_selected = attr
+    # channel_selection.label = 'poop'
     return
 channel_selection.on_click(change_title)
 
@@ -302,7 +309,8 @@ def reset_timer():
     timer_zero = time.time()
 
 ### seed initial values:
-channel_selection.value = "LL_pressure" ## seed initial value
+## this doesn't work in bokeh 2.0 anymore 
+# channel_selection.value = "LL_pressure" ## seed initial value
 change_title("title")
 update_plot()
 global timer_zero
@@ -312,7 +320,7 @@ reset_button.on_click(reset_timer)
 
 # hist_layout = column(hist_p, column(channel_selection, start_date_widget, end_date_widget, update_hist_data))
 
-hist_widgets = widgetbox(channel_selection, start_date_widget, end_date_widget, update_hist_data)
+hist_widgets = Column(channel_selection, start_date_widget, end_date_widget, update_hist_data)
 
 LL_plots = column(LL_display, LL_p)
 prep_plots = column(prep_display, prep_p)
