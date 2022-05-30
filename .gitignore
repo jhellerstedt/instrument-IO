@@ -1,5 +1,6 @@
 .DS_Store
+
 *.p
 *.txt
-
 __pycache__
+
