@@ -20,24 +20,38 @@ from bokeh.models import ColumnDataSource
 import vacom_MVC3 as LL_gauge
 import GP350 as ion_gauge
 
+
+
+## read in config settings
+with open('config.ini', 'r') as f:
+    config = f.read()
+    log_filename = config.split('log_filename=')[1].split('\n')[0]
+    log_filename = os.path.join(os.getcwd(), log_filename)
+    LL_address = config.split('LL_address=')[1].split('\n')[0]
+    prep_address = config.split('prep_address=')[1].split('\n')[0]
+    micro_address = config.split('micro_address=')[1].split('\n')[0]
+# log_filename = "/home/jack/instrument-IO/G80_pressure_logging/G80_pressure_log.txt"
+print(log_filename)
+
+
+
 ### initialize gauges:
 def read_LL():
-    return LL_gauge.read_pressure('/dev/ttyUSB2')
+    # return LL_gauge.read_pressure('/dev/ttyUSB2')
+    return LL_gauge.read_pressure(LL_address)
 
 def read_prep():
-    return ion_gauge.read_pressure('/dev/ttyUSB0')
+    # return ion_gauge.read_pressure('/dev/ttyUSB0')
+    return ion_gauge.read_pressure(prep_address)
 
 
 def read_micro():
-    return ion_gauge.read_pressure('/dev/ttyUSB1')
+    # return ion_gauge.read_pressure('/dev/ttyUSB1')
+    return ion_gauge.read_pressure(micro_address)
     
 
 
 
-## set the log filename as a string
-log_filename = "/home/jack/instrument-IO/G80_pressure_logging/G80_pressure_log.txt"
-# log_filename = os.getcwd() + "/" + log_filename
-print(log_filename)
 
 
 ### if the update_interval callback is 2000 ms or less, too fast for reading the pressure gauge
@@ -117,7 +131,8 @@ def update():
             pressure_dict['LL_pressure'] = current_LL
             pressure_dict['prep_pressure'] = current_prep
             pressure_dict['micro_pressure'] = current_micro
-            with open("/home/jack/instrument-IO/G80_pressure_logging/current_pressure.p", 'wb') as f:
+            temp_path = os.path.join(os.getcwd(), 'current_pressure.p')
+            with open(temp_path, 'wb') as f:
                 pickle.dump(pressure_dict, f)
             
             if t1 - t0_two > data_interval * 1e-3 or first_run == True:

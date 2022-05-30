@@ -11,6 +11,8 @@ import time
 import numpy as np
 import math
 
+import traceback
+
 from tornado import gen
 
 import datetime
@@ -20,15 +22,17 @@ import pytz
 
 from bokeh.io import curdoc
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, DatetimeTickFormatter, WheelZoomTool, Column
-from bokeh.models.widgets import TextInput, Button, PreText, Dropdown
-from bokeh.layouts import column, layout, widgetbox
+from bokeh.models import ColumnDataSource, DatetimeTickFormatter, WheelZoomTool, Column, Select
+from bokeh.models.widgets import TextInput, Button, PreText
+from bokeh.layouts import column, layout #, widgetbox
 
 import read_pressures
-import read_temperatures
 
 from read_pressures import update_interval, log_filename
 from read_pressures import rollover_interval as read_rollover_interval
+
+import read_temperatures
+from read_temperatures import temperature_log_filename
 
 
 total_axis_hours = 24
@@ -182,27 +186,30 @@ def plot_update():
             micro_display.value = str(micro_temp)
        
             
-        T_stm_temp = read_temperatures.current_T_stm
-        T_cryo_temp = read_temperatures.current_T_cryo
         try:
-            T_stm_display.value = plot_source.data['T_stm'][-1]
+            # T_stm_display.value = plot_source.data['T_stm'][-1]
+            T_stm_display.value = str('{0:3.1f}'.format(read_temperatures.current_T_stm))
         except:
             T_stm_display.value = 'T_stm problem'
+            traceback.print_exc()
         try:
-            T_cryo_display.value = plot_source.data['T_cryo'][-1]
+            # T_cryo_display.value = plot_source.data['T_cryo'][-1]
+            T_cryo_display.value = str('{0:3.1f}'.format(read_temperatures.current_T_cryo))
         except:
-            T_cryo_display.value = plot_source.data['T_cryo'][-1]
+            T_cryo_display.value = 'T_cryo problem'
+            traceback.print_exc()
         
         plot_source.stream(dict(x=[(dt.timestamp(dt.strptime(ts, "%Y-%m-%d %H:%M:%S")))*1e3],
-            LL_pressure=[LL_temp],
-            prep_pressure=[prep_temp],
-            microscope_pressure=[micro_temp]),
-            T_stm=[T_stm_temp],
-            T_cryo=[T_cryo_temp],
-            rollover=rollover_interval)
+                                LL_pressure=[LL_temp],
+                                prep_pressure=[prep_temp],
+                                microscope_pressure=[micro_temp],
+                                T_stm=[read_temperatures.current_T_stm],
+                                T_cryo=[read_temperatures.current_T_cryo]
+                                ),
+                           rollover=rollover_interval)
             
     except:
-        print("something wrong in main")
+        traceback.print_exc()
         pass
     t1 = time.time()
     timer_display.value = str(datetime.timedelta(seconds=int(round(t1-timer_zero))))
@@ -215,43 +222,78 @@ def log_history_update(channel_selected, start_date, end_date):
     try:
         os.environ['TZ'] = 'UTC+0' ## Melbourne is UTC+10
         time.tzset()
-        f = open(log_filename)
-
+        
         historical_source.data = dict(x=[], y=[])
         
-        for line in iter(f):
-            ts, pressure = str.split(line, '\t', 1)
-            LL_temp, pressure = str.split(pressure, '\t', 1)
-            prep_temp, micro_temp = str.split(pressure, '\t', 1)
-            ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
-            LL_temp = float(LL_temp)
-            if LL_temp == 0. or math.isnan(LL_temp):
-                try:
-                    LL_temp = historical_source.data['y'][-1]
-                except:
-                    LL_temp = 10
-            prep_temp = float(prep_temp)
-            if prep_temp == 0. or math.isnan(prep_temp):
-                try:
-                    prep_temp = historical_source.data['y'][-1]
-                except:
-                    prep_temp = 10
-            micro_temp = float(micro_temp)
-            if micro_temp == 0. or math.isnan(micro_temp):
-                try:
-                    micro_temp = historical_source.data['y'][-1]
-                except:
-                    micro_temp = 10
-            if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
-                if channel_selected == "LL_pressure" and LL_temp != 0.:
-                    historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[LL_temp]))
-                if channel_selected == "prep_pressure" and prep_temp != 0.:
-                    historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[prep_temp]))
-                if channel_selected == "microscope_pressure" and micro_temp != 0.:
-                    historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[micro_temp]))
-        f.close()
+        if channel_selected in ["LL_pressure", "prep_pressure", "microscope_pressure"]:
+            
+            hist_p.yaxis.axis_label = 'pressure (mbar)'
+            
+            f = open(log_filename)
+            for line in iter(f):
+                ts, pressure = str.split(line, '\t', 1)
+                LL_temp, pressure = str.split(pressure, '\t', 1)
+                prep_temp, micro_temp = str.split(pressure, '\t', 1)
+                ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
+                LL_temp = float(LL_temp)
+                if LL_temp == 0. or math.isnan(LL_temp):
+                    try:
+                        LL_temp = historical_source.data['y'][-1]
+                    except:
+                        LL_temp = 10
+                prep_temp = float(prep_temp)
+                if prep_temp == 0. or math.isnan(prep_temp):
+                    try:
+                        prep_temp = historical_source.data['y'][-1]
+                    except:
+                        prep_temp = 10
+                micro_temp = float(micro_temp)
+                if micro_temp == 0. or math.isnan(micro_temp):
+                    try:
+                        micro_temp = historical_source.data['y'][-1]
+                    except:
+                        micro_temp = 10
+                
+                if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
+                    if channel_selected == "LL_pressure" and LL_temp != 0.:
+                        historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[LL_temp]))
+                    if channel_selected == "prep_pressure" and prep_temp != 0.:
+                        historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[prep_temp]))
+                    if channel_selected == "microscope_pressure" and micro_temp != 0.:
+                        historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[micro_temp]))
+            f.close()
+        
+        if channel_selected in ["T_stm", "T_cryo"]:
+            
+            hist_p.yaxis.axis_label = 'Temperature (K)'
+            
+            f = open(temperature_log_filename)
+            for line in iter(f):
+                ts, temperature = str.split(line, '\t', 1)
+                T_stm, T_cryo = str.split(temperature, '\t', 1)
+                ts = dt.strptime(ts, "%Y-%m-%d %H:%M:%S")
+                
+                T_stm = float(T_stm)
+                if T_stm == 0. or math.isnan(T_stm):
+                    try:
+                        T_stm = historical_source.data['y'][-1]
+                    except:
+                        T_stm = 550
+                
+                T_cryo = float(T_cryo)
+                if T_cryo == 0. or math.isnan(T_cryo):
+                    try:
+                        T_cryo = historical_source.data['y'][-1]
+                    except:
+                        T_cryo = 550
+                if ts > dt.strptime(start_date, "%Y-%m-%d") and ts < dt.strptime(end_date, "%Y-%m-%d"):
+                    if channel_selected == "T_stm" and T_stm != 0.:
+                        historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[T_stm]))
+                    if channel_selected == "T_cryo" and T_cryo != 0.:
+                        historical_source.stream(dict(x=[(dt.timestamp(ts))*1e3], y=[T_cryo]))
+            f.close()
     except:
-        print("something wrong with log file read")
+        traceback.print_exc()
         pass
 
 
@@ -260,7 +302,7 @@ prep_display = TextInput(title="prep pressure", value=" ")
 micro_display = TextInput(title="microscope pressure", value=" ")
 
 T_cryo_display = TextInput(title='T_cryo', value=" ")
-T_stm_display = TextInput(title='T_stm', value=' ')
+T_stm_display = TextInput(title='T_stm', value=" ")
 
 LL_d = PreText
 
@@ -269,10 +311,8 @@ LL_d = PreText
 widget_width = 150
 
 
-menu = [("LL pressure", "LL_pressure"), ("prep pressure", "prep_pressure"), ("microscope", "microscope_pressure")]
-channel_selection = Dropdown(label="select channel", button_type="success", menu=menu, width=widget_width)
-global channel_selected 
-channel_selected = 'LL_pressure' # dropdown value variable
+options = ["LL_pressure", "prep_pressure", "microscope_pressure", "T_stm", "T_cryo"]
+channel_selection = Select(title="select channel", value="prep_pressure", options=options, width=widget_width)
 
 # start_date_widget = DatePicker(title="start date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
 # end_date_widget = DatePicker(title="end date", min_date=dt(2017,1,1), max_date=dt.now(), value=dt(dt.now().year,1,1))
@@ -288,31 +328,25 @@ datetime_display = TextInput(title="timestamp", value=" ")
 
 
 ##callback to update history plot:
-def update_plot():
-    log_history_update(channel_selected, start_date_widget.value, end_date_widget.value)
+def update_plot(attr):
+    log_history_update(channel_selection.value, start_date_widget.value, end_date_widget.value)
     return
+
 update_hist_data.on_click(update_plot)
 
-
-
-def change_title(event):
-    # print(str(event))
-    # global channel_selected
-    # channel_selected = attr
-    # channel_selection.label = 'poop'
+def update_val(attr, old, new):
+    update_plot(attr)
     return
-channel_selection.on_click(change_title)
+    
+channel_selection.on_change('value', update_val)
+
 
 @gen.coroutine
 def reset_timer():
     global timer_zero
     timer_zero = time.time()
 
-### seed initial values:
-## this doesn't work in bokeh 2.0 anymore 
-# channel_selection.value = "LL_pressure" ## seed initial value
-change_title("title")
-update_plot()
+
 global timer_zero
 timer_zero = time.time()
 
