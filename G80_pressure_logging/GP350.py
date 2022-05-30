@@ -13,6 +13,11 @@ import time
 
 
 def read_pressure(serial_address):
+    
+    if serial_address == 'test':
+        return 3.14159
+    
+    
     try:
         ser = serial.Serial(
             port=serial_address,
