@@ -94,6 +94,7 @@ current_T_cryo = 0
 def update():
     global t0, t0_two, rollover_interval, first_run, log_interval, current_T_stm, current_T_cryo
     
+    
     while True:
         # print("sup reading gauges")
         os.environ['TZ'] = 'UTC+0' #'Australia/Melbourne' ## Melbourne is UTC+10
@@ -106,11 +107,17 @@ def update():
             NTCP = nanonisTCP(nanonis_IP, nanonis_port)
             signals_module = Signals(NTCP)
             
-            current_T_cryo = round(interp_func(signals_module.ValGet(2)),2)
-            current_T_stm  = round(interp_func(signals_module.ValGet(3)),2)
+            try:
+                current_T_cryo = np.round(interp_func(signals_module.ValGet(2)),2)
+                current_T_stm  = np.round(interp_func(signals_module.ValGet(3)),2)
+            except Exception as e:
+                print(e)
+                current_T_cryo = np.nan
+                current_T_stm = np.nan
+                
+            NTCP.close_connection() 
             
-            NTCP.close_connection()
-            
+                       
             
             ts = dt.now(tz=pytz.timezone('Australia/Melbourne'))
             ts = str(ts)
@@ -149,4 +156,5 @@ def update():
         except Exception as e:
             print(e)
             continue
+        
             
