@@ -106,8 +106,8 @@ def update():
             NTCP = nanonisTCP(nanonis_IP, nanonis_port)
             signals_module = Signals(NTCP)
             
-            current_T_cryo = interp_func(signals_module.ValGet(2))
-            current_T_stm  = interp_func(signals_module.ValGet(3))
+            current_T_cryo = round(interp_func(signals_module.ValGet(2)),2)
+            current_T_stm  = round(interp_func(signals_module.ValGet(3)),2)
             
             NTCP.close_connection()
             
